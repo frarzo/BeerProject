@@ -1,8 +1,6 @@
 /*
  * This ESP32 code is created by esp32io.com
- *
  * This ESP32 code is released in the public domain
- *
  * For more detail (instruction and wiring diagram), visit https://esp32io.com/tutorials/esp32-rfid-nfc
  */
 #include <PubSubClient.h>
@@ -15,7 +13,6 @@
 
 const char* ssid = "TP-Link";
 const char* password = "WbdL57ak12";
-
 const char* broker = "192.168.1.110";
 const char* topic = "test";
 const int port = 1883;
@@ -30,7 +27,7 @@ void setup() {
   WiFi.begin(ssid, password);
   Serial.print("Connecting to Wifi...");
   while (WiFi.status() != WL_CONNECTED) {
-    delay(1000);
+    delay(2000);
     Serial.print(".");
   }
   Serial.println("");
@@ -55,26 +52,33 @@ void setup() {
   Serial.println("Tap an RFID/NFC tag on the RFID-RC522 reader");
 }
 
-
-
-
 void loop() {
   if (rfid.PICC_IsNewCardPresent()) {  // new tag is available
-    client.publish("test", "RFID letto\n");
-    if (rfid.PICC_ReadCardSerial()) {  // NUID has been readed
-      MFRC522::PICC_Type piccType = rfid.PICC_GetType(rfid.uid.sak);
+    //client.publish("test", "RFID letto\n");
+    if (rfid.PICC_ReadCardSerial()) {                                 // NUID has been readed
+      MFRC522::PICC_Type piccType = rfid.PICC_GetType(rfid.uid.sak);  //sak è il byte risposta di ntag213, indica che il tag è univocamente selezionato e solo questo reader comunica con esso anche con altri device nfc nei paraggi
+      //Serial.println(rfid.uid.sak);
       Serial.print("RFID/NFC Tag Type: ");
       Serial.println(rfid.PICC_GetTypeName(piccType));
 
+      String buffer;
       // print UID in Serial Monitor in the hex format
-      Serial.print("UID:");
-      char buffer[rfid.uid.size];
+      //Serial.print("Dimensione UID è: ");
+      Serial.printf("Dimensione UID è: %d\n",rfid.uid.size);
+      Serial.print("\nUID HEX:");
       for (int i = 0; i < rfid.uid.size; i++) {
-        buffer[i]=(rfid.uid.uidByte[i] < 0x10 )? " 0" : " ";
+        //buffer = buffer + ((rfid.uid.uidByte[i] < 0x10) ? " 0" : " ");
+        //buffer = buffer + (rfid.uid.uidByte[i]);
         Serial.print(rfid.uid.uidByte[i] < 0x10 ? " 0" : " ");
-        Serial.print(rfid.uid.uidByte[i], HEX);
+        Serial.print(rfid.uid.uidByte[i]);
       }
       Serial.println();
+      //Serial.println("UID DEC: " + buffer);
+
+      //Serial.println(rfid.uid.uidByte[8],DEC);
+
+      rfid.PICC_DumpToSerial(&(rfid.uid)); //DUMPS EVERYTHING TO SERIAL
+
 
       rfid.PICC_HaltA();       // halt PICC
       rfid.PCD_StopCrypto1();  // stop encryption on PCD
