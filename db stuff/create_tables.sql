@@ -36,11 +36,16 @@ CREATE TRIGGER updateImporto BEFORE INSERT ON consumazione
 FOR EACH ROW
 BEGIN
 	DECLARE prezzo DECIMAL(6,2);
+-- Inserisco il costo della consumazione nella query
 	SELECT prezzo_litro INTO prezzo FROM birra WHERE birra.id=NEW.beer_id;
 	SET NEW.importo = NEW.quantita*prezzo/1000;
+-- Aggiorno il valore saldo nella tabella Utente sommando
+-- il prezzo della consumazione
+	UPDATE utente SET saldo = saldo + NEW.importo WHERE id = NEW.user_id;
 END;
 
 
+
 INSERT INTO Utente(id,nome, cognome, email, psw, saldo, data_reg) VALUES ('fh9347h0','Francesco', 'Arzon', 'franz9700@gmail.com', 'password123', 100.00, '2010-02-06 10:00:00');
-INSERT INTO Birra (id,nome,prezzo_litro,disp,gradi,tipo) VALUES(00123,'Heineken',7.00,'DISP',3.4,'Lager');
-INSERT INTO consumazione (id,user_id,beer_id,quantita,importo,data_consumazione)VALUES(12,'fh9347h0',00123,500,NULL,NOW());
+INSERT INTO Birra (id,nome,prezzo_litro,disp,gradi,tipo) VALUES(00127,'Heineken',7.00,'NON_DISP',3.4,'Lager');
+INSERT INTO consumazione (id,user_id,beer_id,quantita,importo,data_consumazione)VALUES(12,'fh9347h0',00127,500,NULL,NOW());
