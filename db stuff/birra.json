@@ -1,0 +1,98 @@
+	[
+		{
+			"id": 111,
+			"nome": "Crux",
+			"prezzo_litro": 16.00,
+			"disp": "DISP",
+			"gradi": 5.00,
+			"tipo": "Sour"
+		},
+		{
+			"id": 112,
+			"nome": "Isaac",
+			"prezzo_litro": 15.00,
+			"disp": "DISP",
+			"gradi": 5.00,
+			"tipo": "Blanche"
+		},
+		{
+			"id": 116,
+			"nome": "Black Hole",
+			"prezzo_litro": 18.00,
+			"disp": "DISP",
+			"gradi": 10.50,
+			"tipo": "Imperial Stout"
+		},
+		{
+			"id": 120,
+			"nome": "Lone Wolf",
+			"prezzo_litro": 13.00,
+			"disp": "DISP",
+			"gradi": 6.66,
+			"tipo": "IPA"
+		},
+		{
+			"id": 121,
+			"nome": "Pop",
+			"prezzo_litro": 13.00,
+			"disp": "DISP",
+			"gradi": 6.00,
+			"tipo": "APA"
+		},
+		{
+			"id": 123,
+			"nome": "Heineken",
+			"prezzo_litro": 8.00,
+			"disp": "NON_DISP",
+			"gradi": 3.40,
+			"tipo": "Lager"
+		},
+		{
+			"id": 124,
+			"nome": "Guinness",
+			"prezzo_litro": 12.00,
+			"disp": "DISP",
+			"gradi": 4.20,
+			"tipo": "Stout"
+		},
+		{
+			"id": 125,
+			"nome": "Guerrilla",
+			"prezzo_litro": 15.00,
+			"disp": "DISP",
+			"gradi": 5.80,
+			"tipo": "IPA"
+		},
+		{
+			"id": 126,
+			"nome": "Kilkenny RED",
+			"prezzo_litro": 14.00,
+			"disp": "DISP",
+			"gradi": 4.30,
+			"tipo": "Red Ale"
+		},
+		{
+			"id": 128,
+			"nome": "Peroni",
+			"prezzo_litro": 10.00,
+			"disp": "DISP",
+			"gradi": 4.70,
+			"tipo": "Lager"
+		},
+		{
+			"id": 234,
+			"nome": "Grim Reaper",
+			"prezzo_litro": 12.00,
+			"disp": "NON_DISP",
+			"gradi": 7.00,
+			"tipo": "IPA"
+		},
+		{
+			"id": 312,
+			"nome": "Poretti IPA",
+			"prezzo_litro": 12.00,
+			"disp": "DISP",
+			"gradi": 5.90,
+			"tipo": "IPA"
+		}
+	]
