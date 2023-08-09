@@ -64,7 +64,7 @@ void loop() {
       String buffer;
       // print UID in Serial Monitor in the hex format
       //Serial.print("Dimensione UID è: ");
-      Serial.printf("Dimensione UID è: %d\n",rfid.uid.size);
+      Serial.printf("Dimensione UID è: %d\n", rfid.uid.size);
       Serial.print("\nUID HEX:");
       for (int i = 0; i < rfid.uid.size; i++) {
         //buffer = buffer + ((rfid.uid.uidByte[i] < 0x10) ? " 0" : " ");
@@ -77,7 +77,7 @@ void loop() {
 
       //Serial.println(rfid.uid.uidByte[8],DEC);
 
-      rfid.PICC_DumpToSerial(&(rfid.uid)); //DUMPS EVERYTHING TO SERIAL
+      rfid.PICC_DumpToSerial(&(rfid.uid));  //DUMPS EVERYTHING TO SERIAL
 
 
       rfid.PICC_HaltA();       // halt PICC

@@ -1,4 +1,5 @@
 DROP TABLE IF EXISTS Utente,Birra,Consumazione;
+
 -- Creazione tabella Utente
 CREATE TABLE Utente (
 	id VARCHAR(8) PRIMARY KEY,
@@ -43,9 +44,3 @@ BEGIN
 -- il prezzo della consumazione
 	UPDATE utente SET saldo = saldo + NEW.importo WHERE id = NEW.user_id;
 END;
-
-
-
-INSERT INTO Utente(id,nome, cognome, email, psw, saldo, data_reg) VALUES ('fh9347h0','Francesco', 'Arzon', 'franz9700@gmail.com', 'password123', 100.00, '2010-02-06 10:00:00');
-INSERT INTO Birra (id,nome,prezzo_litro,disp,gradi,tipo) VALUES(00127,'Heineken',7.00,'NON_DISP',3.4,'Lager');
-INSERT INTO consumazione (id,user_id,beer_id,quantita,importo,data_consumazione)VALUES(12,'fh9347h0',00127,500,NULL,NOW());
