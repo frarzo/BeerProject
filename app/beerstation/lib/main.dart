@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:beerstation/users/auth/login_screen.dart';
+
 //import 'package:mysql_client/mysql_client.dart';
 
-List<String> pages = <String>['Storico Consumazioni', 'Homepage', 'Pagamento'];
+List<String> pages = <String>['Homepage', 'Consumazioni', 'Pagamento'];
+List<Object> consumazioni = <Object>[String.fromCharCode(12536), 32];
 
 void main() {
   runApp(const MyApp());
@@ -22,6 +25,8 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+//class Login extends StatefulWidget{}
 
 class MyHomePage extends StatelessWidget {
   const MyHomePage({super.key});
@@ -46,11 +51,11 @@ class MyHomePage extends StatelessWidget {
           bottom: TabBar(
             tabs: <Widget>[
               Tab(
-                icon: const Icon(Icons.home),
+                icon: const Icon(Icons.history),
                 text: pages[1],
               ),
               Tab(
-                icon: const Icon(Icons.history),
+                icon: const Icon(Icons.home),
                 text: pages[0],
               ),
               Tab(
@@ -62,7 +67,6 @@ class MyHomePage extends StatelessWidget {
         ),
         body: TabBarView(
           children: <Widget>[
-            const Text('Ti puzza il culo!'),
             ListView.builder(
               itemCount: 25,
               itemBuilder: (BuildContext context, int index) {
@@ -72,6 +76,7 @@ class MyHomePage extends StatelessWidget {
                 );
               },
             ),
+            const Text('Ti puzza il culo!'),
             Column(
               children: [
                 const SizedBox(
@@ -82,7 +87,12 @@ class MyHomePage extends StatelessWidget {
                   style: TextStyle(fontSize: 35),
                 ),
                 IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const LoginScreen()));
+                    },
                     icon: Image.asset(
                       'assets/gpay.png',
                       scale: 2.5,
