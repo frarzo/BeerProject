@@ -3,13 +3,13 @@
 Project for my IoT's course @UniUD.
 
 <div>
-<img src="docs/icons/raspberry-pi-svgrepo-com.svg" width="48">
-<img src="docs/icons/mqtt-ver.svg" width="58">
-<img src="docs/icons/ISO_C++_Logo.svg.png" width="43">
-<img src="docs/icons/python-svgrepo-com.svg" width="48">
-<img src="docs/icons/espressif-svgrepo-com.svg" width="48">
-<img src="docs/icons/mysql-logo-svgrepo-com.svg" width="60">
-<img src="docs/icons/flutter-svgrepo-com.svg" width="45">
+<a href='https://www.raspberrypi.com/'><img src="docs/icons/raspberry-pi-svgrepo-com.svg" width="48"></a>
+<a href='https://mqtt.org/'><img src="docs/icons/mqtt-ver.svg" width="58"></a>
+<a href=''><img src="docs/icons/ISO_C++_Logo.svg.png" width="43"></a>
+<a href='https://www.python.org/'><img src="docs/icons/python-svgrepo-com.svg" width="48"></a>
+<a href='https://www.espressif.com/'><img src="docs/icons/espressif-svgrepo-com.svg" width="48"></a>
+<a href='https://www.mysql.com/it/'><img src="docs/icons/mysql-logo-svgrepo-com.svg" width="60"></a>
+<a href='https://flutter.dev/'><img src="docs/icons/flutter-svgrepo-com.svg" width="45"></a>
 </div>
 
 
