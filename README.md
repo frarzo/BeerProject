@@ -10,6 +10,7 @@ Project for my IoT's course @UniUD.
 <a href='https://www.espressif.com/'><img src="docs/icons/espressif-svgrepo-com.svg" width="48"></a>
 <a href='https://www.mysql.com/it/'><img src="docs/icons/mysql-logo-svgrepo-com.svg" width="60"></a>
 <a href='https://flutter.dev/'><img src="docs/icons/flutter-svgrepo-com.svg" width="45"></a>
+<a href='https://www.php.net/'><img src="docs/icons/new-php-logo.svg" width="70"></a>
 </div>
 
 
