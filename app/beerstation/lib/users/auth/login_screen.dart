@@ -45,7 +45,7 @@ class _LoginState extends State<LoginScreen> {
                   color: Colors.black,
                 ),
                 hintText: 'Email',
-                hintStyle: TextStyle(color: Colors.brown),
+                hintStyle: TextStyle(color: Colors.black),
               ),
             ))
       ],
@@ -73,7 +73,7 @@ class _LoginState extends State<LoginScreen> {
           child: TextField(
             controller: controllerPassword,
             obscureText: true,
-            style: const TextStyle(color: Colors.pink),
+            style: const TextStyle(color: Colors.black),
             decoration: const InputDecoration(
                 border: InputBorder.none,
                 contentPadding: EdgeInsets.only(top: 10),
@@ -195,12 +195,11 @@ class _LoginState extends State<LoginScreen> {
                 child: Stack(
                   children: <Widget>[
                     Container(
-                      height: double.infinity,
-                      width: double.infinity,
                       decoration: BoxDecoration(
                         image: DecorationImage(
-                            image:
-                                NetworkImage('https://i.imgur.com/MFQHA0D.png'),
+                            image: AssetImage('img/login_final.png'),
+                            //NetworkImage('https://i.imgur.com/NMudl4v.png'),
+                            // Backup, AssetImage a volte non funziona, boh
                             fit: BoxFit.cover),
                       ),
                     ),
