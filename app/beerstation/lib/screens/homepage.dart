@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 List<String> pages = <String>['Homepage', 'Consumazioni', 'Pagamento'];
 List<Object> consumazioni = <Object>[String.fromCharCode(12536), 32];
 
@@ -14,8 +13,9 @@ class _HomePageScreenState extends State<HomePageScreen> {
   @override
   Widget build(BuildContext context) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
-    final Color oddItemColor = colorScheme.primary.withOpacity(0.05);
-    final Color evenItemColor = colorScheme.primary.withOpacity(0.15);
+    final Color oddItemColor =
+        Color.fromARGB(0, 255, 243, 189).withOpacity(0.1);
+    final Color evenItemColor = oddItemColor.withOpacity(0.3);
     const int tabsCount = 3;
     return DefaultTabController(
       initialIndex: 1,
@@ -79,5 +79,4 @@ class _HomePageScreenState extends State<HomePageScreen> {
       ),
     );
   }
-  
 }
