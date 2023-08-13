@@ -12,9 +12,8 @@ class HomePageScreen extends StatefulWidget {
 class _HomePageScreenState extends State<HomePageScreen> {
   @override
   Widget build(BuildContext context) {
-    final ColorScheme colorScheme = Theme.of(context).colorScheme;
-    final Color oddItemColor =
-        Color.fromARGB(0, 255, 243, 189).withOpacity(0.1);
+    //final ColorScheme colorScheme = Theme.of(context).colorScheme;
+    final Color oddItemColor =const Color.fromARGB(0, 255, 243, 189).withOpacity(0.1);
     final Color evenItemColor = oddItemColor.withOpacity(0.3);
     const int tabsCount = 3;
     return DefaultTabController(

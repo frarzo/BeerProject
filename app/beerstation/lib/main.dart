@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'BeerStation',
       theme: ThemeData(
-        colorSchemeSeed: Color.fromARGB(255, 255, 168, 0),
+        colorSchemeSeed: const Color.fromARGB(255, 255, 168, 0),
         useMaterial3: true,
       ),
       home: LoginScreen(),

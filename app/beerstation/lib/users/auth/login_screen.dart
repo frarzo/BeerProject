@@ -1,4 +1,5 @@
 import 'package:beerstation/screens/homepage.dart';
+import 'package:beerstation/users/auth/register_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
@@ -42,10 +43,10 @@ class _LoginState extends State<LoginScreen> {
                 contentPadding: EdgeInsets.only(top: 10),
                 prefixIcon: Icon(
                   Icons.person,
-                  color: Colors.black,
+                  color: Color(0xff272727),
                 ),
                 hintText: 'Email',
-                hintStyle: TextStyle(color: Colors.black),
+                hintStyle: TextStyle(color: Color(0xff272727)),
               ),
             ))
       ],
@@ -65,7 +66,7 @@ class _LoginState extends State<LoginScreen> {
             color: Colors.white,
             borderRadius: BorderRadius.circular(15),
             boxShadow: [
-              BoxShadow(
+              const BoxShadow(
                   color: Colors.black12, blurRadius: 5, offset: Offset(0, 6))
             ],
           ),
@@ -121,37 +122,47 @@ class _LoginState extends State<LoginScreen> {
                   builder: (context) => HomePageScreen(),
                 ));
           },
-          child: Row(children: [
+          child: const Row(children: [
             Icon(
               Icons.login,
               color: Colors.white,
             ),
             SizedBox(
-              width: 10,
+              width: 5,
             ),
             Text('Login ',
                 style: TextStyle(
-                    color: Colors.white, fontSize: 28, fontFamily: 'Roboto'))
+                    color: Colors.white, fontSize: 20, fontFamily: 'Roboto'))
           ]),
+        ),
+        SizedBox(
+          height: 2,
+          width: 1,
         ),
         ElevatedButton(
           style: ElevatedButton.styleFrom(
               backgroundColor: Colors.white, alignment: Alignment.center),
-          onPressed: () => {},
-          child: Row(
+          onPressed: () => {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => RegisterScreen(),
+                ))
+          },
+          child: const Row(
             children: [
               Icon(
                 Icons.email,
                 color: Colors.black,
               ),
               SizedBox(
-                width: 10,
+                width: 5,
               ),
               Text(
                 'Sign Up ',
                 style: TextStyle(
                     color: Color(0xff0b0b0b),
-                    fontSize: 25,
+                    fontSize: 20,
                     fontFamily: 'Roboto'),
               ),
             ],
@@ -162,7 +173,7 @@ class _LoginState extends State<LoginScreen> {
   }
 
   Widget credit() {
-    return Align(
+    return const Align(
         alignment: Alignment.bottomCenter,
         child: Text.rich(
           TextSpan(
@@ -182,63 +193,60 @@ class _LoginState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        theme: ThemeData(
-            colorScheme: Theme.of(context).colorScheme, useMaterial3: true),
-        routes: <String, WidgetBuilder>{
-          '/': (BuildContext context) {
-            return Scaffold(
-              body: AnnotatedRegion<SystemUiOverlayStyle>(
-                value: SystemUiOverlayStyle.light,
-
-                //onTap: () => FocusScope.of(context).unfocus(),
-                child: Stack(
-                  children: <Widget>[
-                    Container(
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image: AssetImage('img/login_final.png'),
-                            //NetworkImage('https://i.imgur.com/NMudl4v.png'),
-                            // Backup, AssetImage a volte non funziona, boh
-                            fit: BoxFit.cover),
+    return Stack(
+      children: [
+        Container(
+            decoration: BoxDecoration(
+                gradient: LinearGradient(
+                    begin: Alignment.topRight,
+                    end: Alignment.bottomLeft,
+                    colors: [
+              //Colors.deepOrange,
+              Colors.orange,
+              Colors.amber,
+            ]))),
+        Image.asset(
+          'assets/mask.png',
+          fit: BoxFit.fitHeight,
+        ),
+        Scaffold(
+          backgroundColor: Colors.transparent,
+          body: AnnotatedRegion<SystemUiOverlayStyle>(
+            value: SystemUiOverlayStyle.light,
+            child: Container(
+              //decoration: BoxDecoration(image: DecorationImage(image: AssetImage('img/login_final.png'),)),
+              margin: EdgeInsets.symmetric(horizontal: 0),
+              height: double.infinity,
+              width: MediaQuery.of(context).size.width,
+              child: SingleChildScrollView(
+                  //physics: NeverScrollableScrollPhysics(),
+                  padding: EdgeInsets.symmetric(horizontal: 30, vertical: 100),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      SizedBox(
+                        height: 100,
                       ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 17),
-                      height: double.infinity,
-                      child: SingleChildScrollView(
-                          physics: NeverScrollableScrollPhysics(),
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 40, vertical: 100),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              SizedBox(
-                                height: 100,
-                              ),
-                              Text(
-                                'Hello',
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 70,
-                                    fontWeight: FontWeight.bold,
-                                    letterSpacing: 1.6),
-                              ),
-                              SizedBox(height: 30),
-                              email(),
-                              SizedBox(height: 10),
-                              password(),
-                              SizedBox(height: 8),
-                              buttons(),
-                            ],
-                          )),
-                    ),
-                    credit()
-                  ],
-                ),
-              ),
-            );
-          },
-        });
+                      const Text(
+                        'Benvenuto',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 50,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 1.6),
+                      ),
+                      SizedBox(height: 30),
+                      email(),
+                      SizedBox(height: 10),
+                      password(),
+                      SizedBox(height: 8),
+                      buttons(),
+                    ],
+                  )),
+            ),
+          ),
+        )
+      ],
+    );
   }
 }
