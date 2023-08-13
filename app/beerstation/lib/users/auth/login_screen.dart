@@ -109,12 +109,9 @@ class _LoginState extends State<LoginScreen> {
               String psw = encrypt_string(controllerPassword.text);
 
               Map<String, String> payload = {'email': mail, 'psw': psw};
-              var res = await http.post(Uri.http(url, '/api.php'),
-                  headers: header, body: payload);
-              print(res.statusCode);
-              if (res.statusCode != 200) {
-                print('Qualcosa è andato storto');
-              }
+
+              var res = await DBPost(url, '/api.php', header, payload);
+              //var r2es = await http.post(Uri.http(url, '/api.php'),headers: header, body: payload);
             }
             Navigator.pushReplacement(
                 context,

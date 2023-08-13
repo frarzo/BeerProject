@@ -1,6 +1,7 @@
 <?php
-header("Content-Type:application/json");
-if (isset($_POST["email"]) && $_POST["email"] != "" && $_POST["psw"] && $_POST["psw"] != "") {
+//header("Content-Type:application/json");
+if (true) {
+    //isset($_POST["email"]) && $_POST["email"] != "" && isset($_POST["psw"]) && $_POST["psw"] != ""
     include("connection.php");
     $email = $_POST["email"];
     $psw = $_POST["psw"];
@@ -22,7 +23,9 @@ if (isset($_POST["email"]) && $_POST["email"] != "" && $_POST["psw"] && $_POST["
     }
 } else {
     response(NULL, NULL, NULL, NULL, NULL, NULL, 400, 'Invalid request');
+    echo"\nparametri settati male";
 }
+
 function response($id, $nome, $cognome, $email, $saldo, $data_reg) {
     $response['id'] = $id;
     $response['nome'] = $nome;
@@ -30,7 +33,5 @@ function response($id, $nome, $cognome, $email, $saldo, $data_reg) {
     $response['email'] = $email;
     $response['saldo'] = $saldo;
     $response['data_reg'] = $data_reg;
-
-    $json_response = json_encode($response);
-    echo $json_response;
+    echo json_encode($response);
 }
