@@ -1,8 +1,8 @@
+import 'package:beerstation/obj/user.dart';
 import 'package:beerstation/screens/homepage.dart';
 import 'package:beerstation/users/auth/register_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:http/http.dart' as http;
 import 'package:beerstation/utils.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -104,20 +104,22 @@ class _LoginState extends State<LoginScreen> {
               backgroundColor: Color(0xff0b0b0b), alignment: Alignment.center),
           onPressed: () async {
             print('Login button pressed');
+
             if (checkFields(controllerMail, controllerPassword)) {
-              String mail = encrypt_string(controllerMail.text);
-              String psw = encrypt_string(controllerPassword.text);
+              //String mail = encrypt_string(controllerMail.text);
+              //String psw = encrypt_string(controllerPassword.text);
+              String mail = controllerMail.text;
+              String psw = controllerPassword.text;
 
               Map<String, String> payload = {'email': mail, 'psw': psw};
-
-              var res = await DBPost(url, '/api.php', header, payload);
-              //var r2es = await http.post(Uri.http(url, '/api.php'),headers: header, body: payload);
+              //Richiesta POST AL SERVER PHP
+              var utente = await DBPost(url, loginUrl, header, payload);
+              print('dopo richiesta');
+              print(utente.getId());
+              print(utente.saldo);
+              Navigator.pushReplacementNamed(context, "homepage",
+                  arguments: utente);
             }
-            Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => HomePageScreen(),
-                ));
           },
           child: const Row(children: [
             Icon(
@@ -193,13 +195,13 @@ class _LoginState extends State<LoginScreen> {
     return Stack(
       children: [
         Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
                 gradient: LinearGradient(
                     begin: Alignment.topRight,
                     end: Alignment.bottomLeft,
                     colors: [
               //Colors.deepOrange,
-              Colors.orange,
+              Color.fromARGB(255, 248, 113, 50),
               Colors.amber,
             ]))),
         Image.asset(
@@ -212,7 +214,7 @@ class _LoginState extends State<LoginScreen> {
             value: SystemUiOverlayStyle.light,
             child: Container(
               //decoration: BoxDecoration(image: DecorationImage(image: AssetImage('img/login_final.png'),)),
-              margin: EdgeInsets.symmetric(horizontal: 0),
+              margin: EdgeInsets.symmetric(horizontal: 5),
               height: double.infinity,
               width: MediaQuery.of(context).size.width,
               child: SingleChildScrollView(
@@ -227,6 +229,13 @@ class _LoginState extends State<LoginScreen> {
                       const Text(
                         'Benvenuto',
                         style: TextStyle(
+                            shadows: <Shadow>[
+                              Shadow(
+                                offset: Offset(5.0, 5.0),
+                                blurRadius: 3.0,
+                                color: Color.fromARGB(20, 0, 0, 0),
+                              ),
+                            ],
                             color: Colors.black,
                             fontSize: 50,
                             fontWeight: FontWeight.bold,

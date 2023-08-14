@@ -115,14 +115,14 @@ class _RegisterState extends State<RegisterScreen> {
     return Stack(
       children: [
         Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
                 gradient: LinearGradient(
                     begin: Alignment.topRight,
                     end: Alignment.bottomLeft,
                     colors: [
               //Colors.deepOrange,
+              Color.fromARGB(255, 248, 113, 50),
               Colors.amber,
-              Colors.orange,
             ]))),
         Image.asset('assets/register.png'),
         Scaffold(
@@ -130,7 +130,7 @@ class _RegisterState extends State<RegisterScreen> {
           body: AnnotatedRegion<SystemUiOverlayStyle>(
               value: SystemUiOverlayStyle.dark,
               child: Container(
-                alignment: Alignment.center,
+                //alignment: Alignment.center,
                 margin: EdgeInsets.symmetric(horizontal: 5),
                 height: double.infinity,
                 width: MediaQuery.of(context).size.width,
@@ -142,13 +142,20 @@ class _RegisterState extends State<RegisterScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         SizedBox(
-                          height: 3,
+                          height: 100,
                         ),
                         const Text(
-                          'Inserisci \ni tuoi dati',
+                          'Enter your data',
                           style: TextStyle(
+                              shadows: <Shadow>[
+                                Shadow(
+                                  offset: Offset(5.0, 5.0),
+                                  blurRadius: 3.0,
+                                  color: Color.fromARGB(90, 0, 0, 0),
+                                ),
+                              ],
                               color: Color.fromARGB(255, 233, 233, 233),
-                              fontSize: 45,
+                              fontSize: 50,
                               fontWeight: FontWeight.bold,
                               letterSpacing: 1.6),
                         ),
