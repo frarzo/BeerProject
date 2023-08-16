@@ -1,7 +1,6 @@
 <?php
 
 if (isset($_POST["email"]) && $_POST["email"] != "" && isset($_POST["psw"]) && $_POST["psw"] != "") {
-    //isset($_POST['porco'])
     $dbhost = 'localhost';
     $dbuser = 'app_api';
     $dbpasssword = 'abcd1234';
@@ -15,14 +14,14 @@ if (isset($_POST["email"]) && $_POST["email"] != "" && isset($_POST["psw"]) && $
 
     $user_psw = $_POST['psw'];
     $user_email = $_POST['email'];
-    //echo '<p>' . $user_email . '  ,  ' . $user_psw . ' </br> </p>';
+
 
     $result = mysqli_query($connection, "SELECT * FROM Utente WHERE email='$user_email' AND psw='$user_psw'");
     if (mysqli_num_rows($result) > 0) {
 
-        //echo "AAAAAAAAAAAAAAAAAAAAAAAAAA" . mysqli_num_rows($result);
+
         $row = mysqli_fetch_array($result);
-        $id = $row['email'];
+        $id = $row['id'];
         $nome = $row['nome'];
         $cognome = $row['cognome'];
         $email = $row['email'];
@@ -32,10 +31,10 @@ if (isset($_POST["email"]) && $_POST["email"] != "" && isset($_POST["psw"]) && $
         mysqli_close($connection);
     } else {
         response(NULL, NULL, NULL, NULL, NULL, NULL);
-        //echo "NO RECORD FOUND</br>";
+
     }
 } else {
-    //echo 'INVALID REQUEST</br>';
+
     response(NULL, NULL, NULL, NULL, NULL, NULL);
 }
 function response($id, $nome, $cognome, $email, $saldo, $data_reg) {

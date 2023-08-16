@@ -1,5 +1,5 @@
-import 'package:beerstation/obj/user.dart';
-import 'package:beerstation/screens/homepage.dart';
+//import 'package:beerstation/obj/user.dart';
+//import 'package:beerstation/screens/homepage.dart';
 import 'package:beerstation/users/auth/register_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -90,15 +90,12 @@ class _LoginState extends State<LoginScreen> {
     );
   }
 
-  bool checkFields(mail, psw) {
-    return mail.text.isNotEmpty && psw.text.isNotEmpty;
-  }
-
   Widget buttons() {
     //final ColorScheme colorScheme = Theme.of(context).colorScheme;
     return ButtonBar(
       mainAxisSize: MainAxisSize.min,
       children: [
+        //LoginButton
         ElevatedButton(
           style: ElevatedButton.styleFrom(
               backgroundColor: Color(0xff0b0b0b), alignment: Alignment.center),
@@ -114,11 +111,24 @@ class _LoginState extends State<LoginScreen> {
               Map<String, String> payload = {'email': mail, 'psw': psw};
               //Richiesta POST AL SERVER PHP
               var utente = await DBPost(url, loginUrl, header, payload);
-              print('dopo richiesta');
+              pippo = await DBGetCons(url,
+                  retrieveConsumazioniUrl,utente.id, header);
+              //print('dopo richiesta');
               print(utente.getId());
-              print(utente.saldo);
-              Navigator.pushReplacementNamed(context, "homepage",
-                  arguments: utente);
+              //print(utente.saldo);
+              if (!(utente.getId() == '')) {
+                Navigator.pushReplacementNamed(context, "homepage",
+                    arguments: utente);
+              } else {
+                final snackbar = SnackBar(
+                  content: const Text('Login Fallito :('),
+                  action: SnackBarAction(
+                    label: 'Ok',
+                    onPressed: () {},
+                  ),
+                );
+                ScaffoldMessenger.of(context).showSnackBar(snackbar);
+              }
             }
           },
           child: const Row(children: [
@@ -138,6 +148,7 @@ class _LoginState extends State<LoginScreen> {
           height: 2,
           width: 1,
         ),
+        //RegisterButton
         ElevatedButton(
           style: ElevatedButton.styleFrom(
               backgroundColor: Colors.white, alignment: Alignment.center),

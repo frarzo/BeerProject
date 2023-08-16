@@ -1,12 +1,12 @@
+//import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:beerstation/users/auth/login_screen.dart';
+//import 'package:beerstation/users/auth/login_screen.dart';
 import 'package:beerstation/utils.dart';
 import 'package:beerstation/obj/user.dart';
+//import 'package:http/http.dart' as http;
+//import 'package:beerstation/obj/consumazione.dart';
 
 List<String> pages = <String>['Homepage', 'Consumazioni', 'Pagamento'];
-List
-
-List<Object> consumazioni = <Object>[String.fromCharCode(12536), 32];
 
 String mailutente = '';
 
@@ -20,14 +20,32 @@ class HomePageScreen extends StatefulWidget {
 }
 
 class _HomePageScreenState extends State<HomePageScreen> {
+  //List consumazioni = [];
+
+  Widget lista(utente) {
+    final Color oddItemColor =
+        const Color.fromARGB(0, 255, 243, 189).withOpacity(0.1);
+    final Color evenItemColor = oddItemColor.withOpacity(0.3);
+    //print(consumazioni);
+    //print('Dimensione pippo:${pippo.length}');
+    return ListView.builder(
+      itemCount: pippo == [] ? 0 : pippo.length,
+      itemBuilder: (BuildContext context, int index) {
+        return ListTile(
+          tileColor: index.isOdd ? oddItemColor : evenItemColor,
+          title: Text(
+              '${(pippo[index])['importo']}€    at  ${pippo[index]['data_consumazione']}'),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final utente = ModalRoute.of(context)?.settings.arguments as User;
 
     //final ColorScheme colorScheme = Theme.of(context).colorScheme;
-    final Color oddItemColor =
-        const Color.fromARGB(0, 255, 243, 189).withOpacity(0.1);
-    final Color evenItemColor = oddItemColor.withOpacity(0.3);
+    String saldo = utente.saldo;
     const int tabsCount = 3;
     return DefaultTabController(
       initialIndex: 1,
@@ -60,20 +78,12 @@ class _HomePageScreenState extends State<HomePageScreen> {
         ),
         body: TabBarView(
           children: <Widget>[
-            ListView.builder(
-              itemCount: 25,
-              itemBuilder: (BuildContext context, int index) {
-                return ListTile(
-                  tileColor: index.isOdd ? oddItemColor : evenItemColor,
-                  title: Text('${pages[1]} $index'),
-                );
-              },
-            ),
+            lista(utente),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text('Welcome ${utente.nome}! 😊',
-                    style: TextStyle(color: Colors.black, fontSize: 10)),
+                    style: TextStyle(color: Colors.black, fontSize: 35)),
                 SizedBox(
                   height: 20,
                 ),
@@ -88,7 +98,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
                       TextSpan(
                           text:
                               'Per lo storico delle consumazioni, swipe a sinistra',
-                          style: TextStyle(color: Colors.black, fontSize: 7)),
+                          style: TextStyle(color: Colors.black, fontSize: 15)),
                     ],
                   ),
                 ),
@@ -100,7 +110,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
                     children: [
                       TextSpan(
                           text: 'Per pagare, swipe a destra',
-                          style: TextStyle(color: Colors.black, fontSize: 7)),
+                          style: TextStyle(color: Colors.black, fontSize: 15)),
                       WidgetSpan(
                           child: Icon(
                         Icons.arrow_forward,
@@ -114,27 +124,38 @@ class _HomePageScreenState extends State<HomePageScreen> {
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const SizedBox(
-                  height: 50,
-                ),
                 Text(
                   'Totale:',
                   style: TextStyle(fontSize: 35),
                 ),
                 Text(
-                  '${utente.saldo} €',
+                  '${saldo} €',
                   style: TextStyle(fontSize: 35),
                 ),
                 SizedBox(
                   height: 10,
                 ),
+                const SizedBox(
+                  height: 50,
+                ),
                 Text(
                   'Per pagare, usa il pulsante',
                   style: TextStyle(
-                      color: Colors.black, fontSize: 9, fontFamily: 'Roboto'),
+                      color: Colors.black, fontSize: 30, fontFamily: 'Roboto'),
                 ),
                 IconButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      if (await resetdebt(url, resetUrl, utente.id, header)) {
+                        showWindowDialog(
+                            'Pagamento confermato! (se non si aggiorna riavvia l\'app)',
+                            context);
+                        setState(() {
+                          saldo = '0';
+                        });
+                      } else {
+                        showWindowDialog('Pagamento fallito', context);
+                      }
+                    },
                     icon: Image.asset(
                       'assets/gpay_small.png',
                       scale: 1.5,

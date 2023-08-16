@@ -18,6 +18,8 @@ class User {
     return this.id;
   }
 
+
+
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
         id: json['id'],

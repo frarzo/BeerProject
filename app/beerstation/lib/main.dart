@@ -1,5 +1,5 @@
 import 'package:beerstation/screens/homepage.dart';
-import 'package:beerstation/users/auth/register_screen.dart';
+//import 'package:beerstation/users/auth/register_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:beerstation/users/auth/login_screen.dart';
 

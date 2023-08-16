@@ -11,6 +11,87 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterState extends State<RegisterScreen> {
   final controllerMail = TextEditingController();
   final controllerPassword = TextEditingController();
+  final controllerNome = TextEditingController();
+  final controllerCognome = TextEditingController();
+
+
+  Widget cognome() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        const SizedBox(
+          height: 10,
+        ),
+        Container(
+            alignment: Alignment.centerLeft,
+            decoration: BoxDecoration(
+              color: Color(0xff272727),
+              borderRadius: BorderRadius.circular(15),
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.black12, blurRadius: 5, offset: Offset(0, 6))
+              ],
+            ),
+            height: 53,
+            child: TextField(
+              controller: controllerCognome,
+              keyboardType: TextInputType.name,
+              style: const TextStyle(
+                  color: Color.fromARGB(255, 255, 255, 255),
+                  fontFamily: 'Roboto'),
+              decoration: const InputDecoration(
+                border: InputBorder.none,
+                contentPadding: EdgeInsets.only(top: 10),
+                prefixIcon: Icon(
+                  Icons.abc,
+                  color: Color.fromARGB(255, 255, 255, 255),
+                ),
+                hintText: 'Cognome',
+                hintStyle: TextStyle(color: Color.fromARGB(255, 207, 207, 207)),
+              ),
+            ))
+      ],
+    );
+  }
+
+  Widget nome() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        const SizedBox(
+          height: 10,
+        ),
+        Container(
+            alignment: Alignment.centerLeft,
+            decoration: BoxDecoration(
+              color: Color(0xff272727),
+              borderRadius: BorderRadius.circular(15),
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.black12, blurRadius: 5, offset: Offset(0, 6))
+              ],
+            ),
+            height: 53,
+            child: TextField(
+              controller: controllerNome,
+              keyboardType: TextInputType.name,
+              style: const TextStyle(
+                  color: Color.fromARGB(255, 255, 255, 255),
+                  fontFamily: 'Roboto'),
+              decoration: const InputDecoration(
+                border: InputBorder.none,
+                contentPadding: EdgeInsets.only(top: 10),
+                prefixIcon: Icon(
+                  Icons.abc,
+                  color: Color.fromARGB(255, 255, 255, 255),
+                ),
+                hintText: 'Nome',
+                hintStyle: TextStyle(color: Color.fromARGB(255, 207, 207, 207)),
+              ),
+            ))
+      ],
+    );
+  }
 
   Widget email() {
     return Column(
@@ -92,7 +173,28 @@ class _RegisterState extends State<RegisterScreen> {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
           backgroundColor: Color(0xff0b0b0b), alignment: Alignment.center),
-      onPressed: () async {},
+      onPressed: () async {
+        print('Register Button Pressed');
+
+        if (checkFields(controllerMail, controllerPassword)) {
+          String mail = controllerMail.text;
+          String psw = controllerPassword.text;
+          String nome = controllerNome.text;
+          String cognome = controllerCognome.text;
+          Map<String, String> payload = {
+            'email': mail,
+            'psw': psw,
+            'nome': nome,
+            'cognome': cognome
+          };
+          var utente = await DBPost(url, registerUrl, header, payload);
+          if (utente.id != '') {
+            showWindowDialog("Utente registrato!", context);
+          } else {
+            showWindowDialog("Errore, riprova perfavore", context);
+          }
+        }
+      },
       child: const Row(mainAxisSize: MainAxisSize.min, children: [
         Icon(
           Icons.mail,
@@ -160,6 +262,10 @@ class _RegisterState extends State<RegisterScreen> {
                               letterSpacing: 1.6),
                         ),
                         SizedBox(height: 30),
+                        nome(),
+                        SizedBox(height: 10),
+                        cognome(),
+                        SizedBox(height: 10),
                         email(),
                         SizedBox(height: 10),
                         password(),
