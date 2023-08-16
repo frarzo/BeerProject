@@ -54,8 +54,8 @@ beerproject/
 
 ## App Screenshots:
 
-<div><img src='docs/app_images/login.jpg' width='200'>
-<img src='docs/app_images/register.jpg' width='200'>
+<div><img src='docs/app_images/login.jpg' width='190'>
+<img src='docs/app_images/register.jpg' width='190'>
 <img src='docs/app_images/home.jpg' width='170'>
 <img src='docs/app_images/consumazioni.jpg' width='170'>
 <img src='docs/app_images/saldo.jpg' width='170'></div>
