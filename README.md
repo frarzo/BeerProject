@@ -14,8 +14,48 @@ Project for my IoT's course @UniUD.
 </div>
 
 
-This project I developed is my submission for my Internet of Things' exam.
+This project I developed is my submission for my _Internet of Things'_ exam.
 
 I tried to implement as many things as possible I've learned to use during the course and using the ESP programmable boards I've previously played with.
 
 Arzon Francesco - 142439
+
+## Folder Structure:
+
+<details>
+<summary>Brief tree folder view with the essential files</summary>
+
+```
+beerproject/
+├─ API/
+│  ├─ login.php
+│  ├─ register.php
+│  ├─ resetdebt.php
+├─ DB/
+│  ├─ new_file
+├─ app/
+│  ├─ beerstation/
+│  │  ├─ lib/
+│  │  │  ├─ obj/
+│  │  │  │  ├─ consumazione.dart
+│  │  │  │  ├─ user.dart
+│  │  │  ├─ screens/
+│  │  │  │  ├─ homepage.dart
+│  │  │  ├─ users/
+│  │  │  │  ├─ login_screen.dart
+│  │  │  │  ├─ register_screen.dart
+│  │  │  ├─ main.dart
+│  │  │  ├─ utils.dart
+├─ docs/
+│  ├─ app_images/
+│  ├─ icons/
+```
+</details>
+
+## App Screenshots:
+
+<div><img src='docs/app_images/login.jpg' width='200'>
+<img src='docs/app_images/register.jpg' width='200'>
+<img src='docs/app_images/home.jpg' width='170'>
+<img src='docs/app_images/consumazioni.jpg' width='170'>
+<img src='docs/app_images/saldo.jpg' width='170'></div>
