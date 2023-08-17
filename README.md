@@ -62,3 +62,10 @@ beerproject/
 <img src='docs/app_images/home.jpg' width='150'>
 <img src='docs/app_images/consumazioni.jpg' width='150'>
 <img src='docs/app_images/saldo.jpg' width='150'></div>
+
+## Details
+PHP server
+```
+cd ./beerproject
+php -S 0.0.0.0:80
+```
