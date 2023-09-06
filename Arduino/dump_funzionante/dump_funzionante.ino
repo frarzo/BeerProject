@@ -54,19 +54,36 @@ void setup() {
 
 void loop() {
   if (rfid.PICC_IsNewCardPresent()) {  // new tag is available
-    Serial.println("NEW CARD PRESENT");
+    Serial.println("LETTURA\n");
     //client.publish("test", "RFID letto\n");
-    if (rfid.PICC_ReadCardSerial()) { 
-      long int t1= millis();
-      while(rfid.){
-        Serial.print('Spillando\n');
-        delay(1000);
-      }
-      long int t2= millis();
-      Serial.println(t2-t1);
+    if (rfid.PICC_ReadCardSerial()) {                                 // NUID has been readed
+      MFRC522::PICC_Type piccType = rfid.PICC_GetType(rfid.uid.sak);  //sak è il byte risposta di ntag213, indica che il tag è univocamente selezionato e solo questo reader comunica con esso anche con altri device nfc nei paraggi
+      //Serial.println(rfid.uid.sak);
+      Serial.print("RFID/NFC Tag Type: ");
+      Serial.println(rfid.PICC_GetTypeName(piccType));
 
-     // Serial.println("READ CARD SERIAL");
+      String buffer;
+      // print UID in Serial Monitor in the hex format
+      //Serial.print("Dimensione UID è: ");
+      Serial.printf("Dimensione UID è: %d\n", rfid.uid.size);
+      Serial.print("\nUID HEX:");
+      for (int i = 0; i < rfid.uid.size; i++) {
+        //buffer = buffer + ((rfid.uid.uidByte[i] < 0x10) ? " 0" : " ");
+        //buffer = buffer + (rfid.uid.uidByte[i]);
+        Serial.print(rfid.uid.uidByte[i] < 0x10 ? " 0" : " ");
+        Serial.print(rfid.uid.uidByte[i]);
+      }
+      Serial.println();
+      //Serial.println("UID DEC: " + buffer);
+
+      //Serial.println(rfid.uid.uidByte[8],DEC);
+
+      rfid.PICC_DumpToSerial(&(rfid.uid));  //DUMPS EVERYTHING TO SERIAL
+
+
+      rfid.PICC_HaltA();       // halt PICC
+      rfid.PCD_StopCrypto1();  // stop encryption on PCD
     }
   }
-  //sleep(1);
+  sleep(1);
 }
