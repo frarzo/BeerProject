@@ -23,7 +23,7 @@ PubSubClient client(WIFIclient);
 
 void setup() {
   Serial.begin(9600);
-
+  client.publish()
   WiFi.begin(ssid, password);
   Serial.print("Connecting to Wifi...");
   while (WiFi.status() != WL_CONNECTED) {
