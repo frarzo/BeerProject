@@ -1,4 +1,5 @@
 import paho.mqtt.client as mosquitto
+import json
 
 broker = '192.168.1.110'
 port = 1883
@@ -12,9 +13,12 @@ def on_publish(client, userdata, result):
 
 
 def on_message(client, userdata, message):
+    decoded_message=str(message.payload.decode('utf-8'))
     print(
-        f'Message received: {str(message.payload.decode("utf-8"))}\n, TOPIC = {message.topic}\nQoS = {message.qos}\n RETAIN = {message.retain}')
-    client.publish('beer/pump', str(message.payload.decode("utf-8")))
+        f'Message received: {decoded_message}\n, TOPIC = {message.topic}\nQoS = {message.qos}\n RETAIN = {message.retain}')
+    cmd= json.loads(decoded_message)['cmd']
+
+    client.publish('beer/pump',cmd)
 
 
 client.on_publish = on_publish

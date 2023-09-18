@@ -2,6 +2,7 @@
 #include <MFRC522.h>
 #include <PubSubClient.h>
 #include <WiFi.h>
+#include <ArduinoJson.h>
 
 #define SS_PIN 5    // ESP32 pin GPIO5
 #define RST_PIN 27  // ESP32 pin GPIO27
@@ -62,7 +63,7 @@ String readUID() {
   for (int i = 0; i < rfid.uid.size; i++) {
     buff[i] = rfid.uid.uidByte[i];
   }
-  sprintf(buffer, "%02X %02X %02X %02X %02X %02X %02X %02X\0", buff[0], buff[1], buff[2], buff[3], buff[4], buff[5], buff[6], buff[7]);
+  sprintf(buffer, "%02X%02X%02X%02X%02X%02X%02X%02X\0", buff[0], buff[1], buff[2], buff[3], buff[4], buff[5], buff[6], buff[7]);
   //client.publish(topic, buffer);
   return buffer;
 }
@@ -100,7 +101,7 @@ void loop() {
   MFRC522::StatusCode status = rfid.PICC_WakeupA(bufferATQA, &bufferSize);
   //Serial.print("Before check, status - ");
   //Serial.println(status, DEC);
-  String uid_tag = "";
+  static String uid_tag = "";
 
   if (rfid.PICC_IsNewCardPresent() && rfid.PICC_ReadCardSerial()) {
 
@@ -111,7 +112,15 @@ void loop() {
 
     if (!tagPresent) {  // if tagPresent = false, then the tag has just "arrived"
       //NON devo leggere lo uid del tag, ma i dati scritti nella memoria del tag che corrispondono all' id dell'utente del DB, modifica la funzione o creane una nuova
-      String payload = "{id:" + uid_tag + ",cmd:1}";
+      const int capacity = JSON_OBJECT_SIZE(2);
+      StaticJsonDocument<capacity> JsonDoc;
+
+      JsonDoc["id"] = uid_tag.c_str();
+      JsonDoc["cmd"] = "1";
+      char payload[50];
+
+      serializeJson(JsonDoc, payload);
+
       if (client.publish(topicRequests, payload)) {
         Serial.println("MQTT publish to topic beer/pump");
       }
@@ -129,9 +138,18 @@ void loop() {
       Serial.print("Tag NFC stayed for ");
       Serial.print(duration);
       Serial.println(" ms");
-      String payload = "{id:" + uid_tag + ",duration:" + String(duration).c_str() + "}";
-      if (client.publish(topicRequests, "0")) {
-        Serial.println("MQTT publish to topic beer/equests");
+
+      const int capacity = JSON_OBJECT_SIZE(2);
+      StaticJsonDocument<capacity> JsonDoc;
+
+      JsonDoc["id"] = uid_tag.c_str();
+      JsonDoc["cmd"] = "0";
+      char payload[50];
+
+      serializeJson(JsonDoc, payload);
+
+      if (client.publish(topicRequests, payload)) {
+        Serial.println("MQTT publish to topic beer/requests");
       }
       if (client.publish(topicDB, String(duration).c_str())) {
         Serial.println("MQTT publish to topic BEER/DB");
