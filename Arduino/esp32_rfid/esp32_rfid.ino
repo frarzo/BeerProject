@@ -7,6 +7,7 @@
 #define SS_PIN 5    // ESP32 pin GPIO5
 #define RST_PIN 27  // ESP32 pin GPIO27
 
+
 MFRC522 rfid(SS_PIN, RST_PIN);
 WiFiClient WIFIclient;
 PubSubClient client(WIFIclient);
@@ -21,6 +22,7 @@ const char* broker = "192.168.1.110";
 const char* topicRequests = "beer/requests";
 const char* topicDB = "BEER/DB";
 const int port = 1883;
+const uint8_t pageAddress = 0x06;
 
 byte bufferATQA[2];
 byte bufferSize = sizeof(bufferATQA);
@@ -55,17 +57,31 @@ void setup() {
   Serial.println("Use an RFID tag");
 }
 
+//TODO: - Migliora i nomi, sono poco intuitivi
+//      - Elimina variabili commentate inutili da tentativi precedenti
+String readUserID() {
+  //char buffer[24];  //24 chars included endstring
+  byte Bytesbuffer[18];
+  byte size = sizeof(Bytesbuffer);
+  char buff[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+  //memcpy(Bytesbuffer, "00000000", 8);
 
-String readUID() {
-  char buff[] = { 0, 0, 0, 0, 0, 0, 0, 0 };
-  char buffer[24];  //24 chars included endstring
-
-  for (int i = 0; i < rfid.uid.size; i++) {
-    buff[i] = rfid.uid.uidByte[i];
+  MFRC522::StatusCode ReadStatus = (MFRC522::StatusCode)rfid.MIFARE_Read(pageAddress, Bytesbuffer, &size);
+  if (ReadStatus != MFRC522::STATUS_OK) {
+    Serial.print(F("MIFARE_Read() failed: "));
+    Serial.println(rfid.GetStatusCodeName(ReadStatus));
+    return "";
   }
-  sprintf(buffer, "%02X%02X%02X%02X%02X%02X%02X%02X\0", buff[0], buff[1], buff[2], buff[3], buff[4], buff[5], buff[6], buff[7]);
+
+  for (int i = 0; i < sizeof(buff); i++) {
+    buff[i] = (char)Bytesbuffer[i];
+  }
+  buff[8] = '\0';
+
+
+  //sprintf(buffer, "%02X%02X%02X%02X%02X%02X%02X%02X\0", buff[0], buff[1], buff[2], buff[3], buff[4], buff[5], buff[6], buff[7]);
   //client.publish(topic, buffer);
-  return buffer;
+  return buff;
 }
 
 void reconnect() {
@@ -105,7 +121,7 @@ void loop() {
 
   if (rfid.PICC_IsNewCardPresent() && rfid.PICC_ReadCardSerial()) {
 
-    uid_tag = readUID();  //NON devo leggere lo uid del tag, ma i dati scritti nella memoria del tag che corrispondono all' id dell'utente del DB, modifica la funzione o creane una nuova
+    uid_tag = readUserID();  //NON devo leggere lo uid del tag, ma i dati scritti nella memoria del tag che corrispondono all' id dell'utente del DB, modifica la funzione o creane una nuova
     status = rfid.PICC_WakeupA(bufferATQA, &bufferSize);
     //Serial.print("Inside IF, status - ");
     //Serial.println(status, DEC);
