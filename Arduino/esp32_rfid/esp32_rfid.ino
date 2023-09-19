@@ -20,9 +20,10 @@ const char* ssid = "dev";
 const char* password = "WbdL57ak12";
 const char* broker = "192.168.1.110";
 const char* topicRequests = "beer/requests";
-const char* topicDB = "BEER/DB";
+const char* topicDB = "beer/duration";
 const int port = 1883;
 const uint8_t pageAddress = 0x06;
+const int idPompa = 1;
 
 byte bufferATQA[2];
 byte bufferSize = sizeof(bufferATQA);
@@ -104,7 +105,6 @@ void reconnect() {
   }
 }
 
-
 //Non so perché devo mettere 3 volte il wakeup ma così funziona, provato a caso
 //Se elimino anche uno non funziona quindi non toccare
 
@@ -155,20 +155,36 @@ void loop() {
       Serial.print(duration);
       Serial.println(" ms");
 
-      const int capacity = JSON_OBJECT_SIZE(2);
-      StaticJsonDocument<capacity> JsonDoc;
+      //--------------------------------------
 
-      JsonDoc["id"] = uid_tag.c_str();
-      JsonDoc["cmd"] = "0";
-      char payload[50];
+      const int capacity1 = JSON_OBJECT_SIZE(2);
+      StaticJsonDocument<capacity1> JsonDoc1;
 
-      serializeJson(JsonDoc, payload);
+      JsonDoc1["id"] = uid_tag.c_str();
+      JsonDoc1["cmd"] = "0";
 
-      if (client.publish(topicRequests, payload)) {
+      char payload1[50];
+
+      serializeJson(JsonDoc1, payload1);
+
+      if (client.publish(topicRequests, payload1)) {
         Serial.println("MQTT publish to topic beer/requests");
       }
-      if (client.publish(topicDB, String(duration).c_str())) {
-        Serial.println("MQTT publish to topic BEER/DB");
+
+      //--------------------------------------
+
+      const int capacity2 = JSON_OBJECT_SIZE(3);
+      StaticJsonDocument<capacity2> JsonDoc2;
+
+      //JsonDoc2["id"] = uid_tag.c_str();
+      JsonDoc2["idPompa"] = idPompa;
+      JsonDoc2["duration"] = String(duration);
+      char payload2[128];
+      serializeJsonPretty(JsonDoc2, Serial);
+      serializeJson(JsonDoc2, payload2);
+
+      if (client.publish(topicDB, payload2)) {
+        Serial.println("MQTT publish to topic beer/duration");
       }
       //  noted the last tag's time, reset
       tagPresent = false;

@@ -12,8 +12,8 @@ const url = '192.168.1.104:80';
 const loginUrl = '/API/login.php';
 const registerUrl = '/API/register.php';
 const resetUrl = '/API/resetdebt.php';
-List<dynamic> pippo = [];
 const retrieveConsumazioniUrl = '/API/getconsumazioni.php';
+List<dynamic> pippo = [];
 
 const Map<String, String> header = {
   'Content-Type': 'application/x-www-form-urlencoded'
@@ -56,7 +56,7 @@ bool checkFields(mail, psw) {
 
 Future<User> DBPost(String url, String path, Map<String, String> header,
     Map<String, String> payload) async {
-  //print("$url, $path");
+  print("$url, $path");
   final response = await http.post(
     Uri.http(url, path),
     headers: header,
