@@ -20,7 +20,7 @@ const char* ssid = "dev";
 const char* password = "WbdL57ak12";
 const char* broker = "192.168.1.110";
 const char* topicRequests = "beer/requests";
-const char* topicDB = "beer/duration";
+const char* topicDuration = "beer/duration";
 const int port = 1883;
 const uint8_t pageAddress = 0x06;
 const int idPompa = 1;
@@ -128,22 +128,26 @@ void loop() {
 
     if (!tagPresent) {  // if tagPresent = false, then the tag has just "arrived"
       //NON devo leggere lo uid del tag, ma i dati scritti nella memoria del tag che corrispondono all' id dell'utente del DB, modifica la funzione o creane una nuova
-      const int capacity = JSON_OBJECT_SIZE(2);
+      const int capacity = JSON_OBJECT_SIZE(3);
       StaticJsonDocument<capacity> JsonDoc;
 
       JsonDoc["id"] = uid_tag.c_str();
+      JsonDoc["idPompa"] = idPompa;
       JsonDoc["cmd"] = "1";
-      char payload[50];
+      char payload[64];
 
       serializeJson(JsonDoc, payload);
 
       if (client.publish(topicRequests, payload)) {
         Serial.println("MQTT publish to topic beer/pump");
+        serializeJson(JsonDoc, Serial);
+        Serial.println();
       }
-      Serial.println(uid_tag);
+
+      //Serial.println(uid_tag);
       tagPresent = true;
       timeStart = millis();
-      Serial.println("Tag NFC RILEVATO!");
+      //Serial.println("Tag NFC RILEVATO!");
     }
 
   } else {
@@ -157,13 +161,14 @@ void loop() {
 
       //--------------------------------------
 
-      const int capacity1 = JSON_OBJECT_SIZE(2);
+      const int capacity1 = JSON_OBJECT_SIZE(3);
       StaticJsonDocument<capacity1> JsonDoc1;
 
       JsonDoc1["id"] = uid_tag.c_str();
+      JsonDoc1["idPompa"] = idPompa;
       JsonDoc1["cmd"] = "0";
 
-      char payload1[50];
+      char payload1[72];
 
       serializeJson(JsonDoc1, payload1);
 
@@ -173,17 +178,18 @@ void loop() {
 
       //--------------------------------------
 
-      const int capacity2 = JSON_OBJECT_SIZE(3);
+      const int capacity2 = JSON_OBJECT_SIZE(2) + 8;  //In caso di null, aggiungere bytes alla capacità
       StaticJsonDocument<capacity2> JsonDoc2;
-
-      //JsonDoc2["id"] = uid_tag.c_str();
-      JsonDoc2["idPompa"] = idPompa;
+      Serial.println(String(duration));
+      JsonDoc2["id"]=uid_tag.c_str();
       JsonDoc2["duration"] = String(duration);
-      char payload2[128];
+      char payload2[48];
+
       serializeJsonPretty(JsonDoc2, Serial);
+      Serial.print("\n");
       serializeJson(JsonDoc2, payload2);
 
-      if (client.publish(topicDB, payload2)) {
+      if (client.publish(topicDuration, payload2)) {
         Serial.println("MQTT publish to topic beer/duration");
       }
       //  noted the last tag's time, reset
