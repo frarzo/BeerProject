@@ -32,6 +32,14 @@ CREATE TABLE Consumazione(
 	FOREIGN KEY (beer_id) REFERENCES Birra(id)
 );
 
+-- Creazione tabella Pompa
+CREATE TABLE Pompa(
+	id INT AUTO_INCREMENT PRIMARY KEY ,
+	beer_id INT NOT NULL,
+	FOREIGN KEY (beer_id) REFERENCES Birra(id)	
+);
+
+
 -- Creazione trigger updateImporto
 CREATE TRIGGER updateImporto BEFORE INSERT ON consumazione
 FOR EACH ROW

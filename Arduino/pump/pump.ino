@@ -30,10 +30,11 @@ const char* mqtt_server = "192.168.1.110";
 WiFiClient espClient;
 PubSubClient client(espClient);
 unsigned long lastMsg = 0;
-#define MSG_BUFFER_SIZE	(50)
+#define MSG_BUFFER_SIZE (50)
 char msg[MSG_BUFFER_SIZE];
 int value = 0;
-
+int idPompa = 1;
+const char* mqtt_topic = "beer/pump1";
 void setup_wifi() {
 
   delay(10);
@@ -69,13 +70,12 @@ void callback(char* topic, byte* payload, unsigned int length) {
 
   // Switch on the LED if an 1 was received as first character
   if ((char)payload[0] == '1') {
-    digitalWrite(BUILTIN_LED, LOW);   // Turn the LED on (Note that LOW is the voltage level
+    digitalWrite(BUILTIN_LED, LOW);  // Turn the LED on (Note that LOW is the voltage level
     // but actually the LED is on; this is because
     // it is active low on the ESP-01)
   } else {
     digitalWrite(BUILTIN_LED, HIGH);  // Turn the LED off by making the voltage HIGH
   }
-
 }
 
 void reconnect() {
@@ -91,7 +91,7 @@ void reconnect() {
       // Once connected, publish an announcement...
       //client.publish("outTopic", "hello world");
       // ... and resubscribe
-      client.subscribe("beer/pump");
+      client.subscribe(mqtt_topic);
     } else {
       Serial.print("failed, rc=");
       Serial.print(client.state());
@@ -103,7 +103,7 @@ void reconnect() {
 }
 
 void setup() {
-  pinMode(BUILTIN_LED, OUTPUT);     // Initialize the BUILTIN_LED pin as an output
+  pinMode(BUILTIN_LED, OUTPUT);  // Initialize the BUILTIN_LED pin as an output
   Serial.begin(115200);
   setup_wifi();
   client.setServer(mqtt_server, 1883);
@@ -121,7 +121,7 @@ void loop() {
   if (now - lastMsg > 2000) {
     lastMsg = now;
     ++value;
-    snprintf (msg, MSG_BUFFER_SIZE, "hello world #%ld", value);
+    snprintf(msg, MSG_BUFFER_SIZE, "hello world #%ld", value);
     //Serial.print("Publish message: ");
     //Serial.println(msg);
     //client.publish("outTopic", msg);
