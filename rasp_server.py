@@ -35,7 +35,8 @@ def on_message(client, userdata, message):
             #print('beer/pompa'+str(idPompa))
             client.publish('beer/pump'+str(idPompa), payload['cmd'])
         else:
-            client.publish('beer/pump'+str(idPompa),'2')    #Se l'ID non è riconosciuto
+            client.publish('beer/pump'+str(idPompa),'2') 
+            return   #Se l'ID non è riconosciuto
 
 
     if message.topic == "beer/duration":
@@ -47,6 +48,8 @@ def on_message(client, userdata, message):
             # Arbitrariamente, erogati 45 ml/s
             mills = int(payload['duration'])*0.045
             id = payload['id']
+            if id=="":
+                return
             #idPompa = payload['idPompa']
             cursor.execute(f'SELECT beer_id FROM Pompa WHERE id=\'{idPompa}\'')
             result = cursor.fetchall()

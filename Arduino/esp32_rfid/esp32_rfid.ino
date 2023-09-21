@@ -120,17 +120,24 @@ void loop() {
   static String uid_tag = "";
 
   if (rfid.PICC_IsNewCardPresent() && rfid.PICC_ReadCardSerial()) {
+    Serial.println(rfid.uid.sak,HEX);
+    if(rfid.uid.sak != 0x00){
+      return;
+    }
 
-    uid_tag = readUserID();  //NON devo leggere lo uid del tag, ma i dati scritti nella memoria del tag che corrispondono all' id dell'utente del DB, modifica la funzione o creane una nuova
+    uid_tag = readUserID();  
     status = rfid.PICC_WakeupA(bufferATQA, &bufferSize);
     //Serial.print("Inside IF, status - ");
     //Serial.println(status, DEC);
 
     if (!tagPresent) {  // if tagPresent = false, then the tag has just "arrived"
-      //NON devo leggere lo uid del tag, ma i dati scritti nella memoria del tag che corrispondono all' id dell'utente del DB, modifica la funzione o creane una nuova
+     
       const int capacity = JSON_OBJECT_SIZE(3);
       StaticJsonDocument<capacity> JsonDoc;
 
+      if (uid_tag.isEmpty()) {
+      return;
+      }
       JsonDoc["id"] = uid_tag.c_str();
       JsonDoc["idPompa"] = idPompa;
       JsonDoc["cmd"] = "1";
