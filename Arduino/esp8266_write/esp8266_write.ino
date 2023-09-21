@@ -6,18 +6,29 @@
 MFRC522 mfrc522(SS_PIN, RST_PIN);
 MFRC522::MIFARE_Key key;
 MFRC522::StatusCode status;
-
+//INDIRIZZO TAG NFC su cui scrivere
 uint8_t pageAddress = 0x06;
+//DATI CARD NFC per leggere
+byte sector = 1;
+byte block = 4;
+byte trailerBlock = 7;
 
+//Variabili di buffer
 byte buffer[18];
 byte size = sizeof(buffer);
-
+boolean cardIsRead = false;
 
 void setup() {
   Serial.begin(115200);  // Initialize serial communications
   SPI.begin();           // Init SPI bus
   mfrc522.PCD_Init();    // Init MFRC522
-  memcpy(buffer, "00aaa000", 8);
+  //memcpy(buffer, "00aaa000", 8);
+  for (byte i = 0; i < 6; i++) {
+    key.keyByte[i] = 0xFF;
+  }
+  //Per un aiuto visivo se lettura e scrittura sono andate a buon fine
+  pinMode(BUILTIN_LED, OUTPUT);
+  digitalWrite(BUILTIN_LED, HIGH);
 }
 
 void loop() {
@@ -27,37 +38,57 @@ void loop() {
     delay(50);
     return;
   }
-  // Select one of the cards
   if (!mfrc522.PICC_ReadCardSerial()) {
     delay(50);
     return;
   }
-  //WRITE THE DATA
-  for (int i = 0; i < 4; i++) {
-    status = mfrc522.MIFARE_Ultralight_Write(pageAddress + i, &buffer[i * 4], 4);
+
+  // Se è la tessera, leggo i byte e li copio
+  if (mfrc522.uid.sak == 0x08) {
+
+    //Auth using key A
+    status = (MFRC522::StatusCode)mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, trailerBlock, &key, &(mfrc522.uid));
     if (status != MFRC522::STATUS_OK) {
-      Serial.print(F("MIFARE WRITE FAILED: "));
+      Serial.print(F("PCD_Authenticate() failed: "));
       Serial.println(mfrc522.GetStatusCodeName(status));
       return;
     }
+
+    //Read the block
+    status = (MFRC522::StatusCode)mfrc522.MIFARE_Read(block, buffer, &size);
+    if (status != MFRC522::STATUS_OK) {
+      Serial.print(F("MIFARE_Read() failed: "));
+      Serial.println(mfrc522.GetStatusCodeName(status));
+    } else {
+      digitalWrite(BUILTIN_LED, LOW);
+      cardIsRead = true;
+      Serial.print("Letto ID dello user: ");
+      for (int i = 0; i < 8; i++) {
+        Serial.print((char)buffer[i]);
+      }
+    }
+    mfrc522.PICC_HaltA();
+    mfrc522.PCD_StopCrypto1();
   }
-  Serial.println(F("MIFARE WRITE OK"));
+  // Se è il tag NTAG213 ed è in memoria un ID utente
+  if (cardIsRead == true && mfrc522.uid.sak == 0x00) {
+
+    //Scrivi in memoria l'ID utente
+    for (int i = 0; i < 4; i++) {
+      status = mfrc522.MIFARE_Ultralight_Write(pageAddress + i, &buffer[i * 4], 4);
+      if (status != MFRC522::STATUS_OK) {
+        Serial.print(F("MIFARE WRITE FAILED: "));
+        Serial.println(mfrc522.GetStatusCodeName(status));
+        return;
+      } else {
+        digitalWrite(BUILTIN_LED, HIGH);
+        Serial.println("Salvato Id utente nel tag");
+        cardIsRead = false;
+      }
+    }
+  }
+
   Serial.println();
-
-  //READ THE DATA
-  status = (MFRC522::StatusCode)mfrc522.MIFARE_Read(pageAddress, buffer, &size);
-  if (status != MFRC522::STATUS_OK) {
-    Serial.print(F("MIFARE_Read() failed: "));
-    Serial.println(mfrc522.GetStatusCodeName(status));
-    return;
-  }
-
-  for (int i = 0; i < 8; i++) {
-    Serial.print((char)buffer[i]);
-  }
-
-
-  Serial.println();
-  Serial.println("------------------");
+  Serial.println("");
   mfrc522.PICC_HaltA();
 }

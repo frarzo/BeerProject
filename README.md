@@ -69,3 +69,10 @@ PHP server
 cd ./beerproject
 php -S 0.0.0.0:80
 ```
+On RaspPi (or other local PC)
+```
+mosquitto
+```
+```
+python rasp_server.py
+```
