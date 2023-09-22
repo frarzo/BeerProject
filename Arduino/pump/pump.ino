@@ -161,6 +161,7 @@ void showError() {
   display.println(F("registrato"));
   display.display();
   delay(3000);
+  resetScreen();
 }
 
 void setup() {

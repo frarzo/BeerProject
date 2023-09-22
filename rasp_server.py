@@ -37,7 +37,8 @@ def on_message(client, userdata, message):
             #print('beer/pompa'+str(idPompa))
             client.publish('beer/pump'+str(idPompa), payload['cmd'])
         else:
-            client.publish('beer/pump'+str(idPompa),'2')    #Se l'ID non è riconosciuto
+            client.publish('beer/pump'+str(idPompa),'2') 
+            return   #Se l'ID non è riconosciuto
 
     # If the tag has been removed, receive the duration 
     if message.topic == "beer/duration":
@@ -50,6 +51,8 @@ def on_message(client, userdata, message):
             # Arbitrariamente, erogati 45 ml/s [da rivedere]
             mills = int(payload['duration'])*0.045
             id = payload['id']
+            if id=="":
+                return
             #idPompa = payload['idPompa']
             # Check which beer is assigned to that pump
             cursor.execute(f'SELECT beer_id FROM Pompa WHERE id=\'{idPompa}\'')
