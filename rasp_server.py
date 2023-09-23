@@ -9,7 +9,6 @@ client = mosquitto.Client("RaspberryPi HUB")
 
 
 def on_publish(client, userdata, result):
-    #print(f"Data published: {result}")
     pass
 
 def on_message(client, userdata, message):
@@ -18,7 +17,7 @@ def on_message(client, userdata, message):
     try:
       decoded_message = str(message.payload.decode('utf-8'))  
     except Exception:
-        print("Messaggio codificato male")
+        print("Messaggio codificato male...")
         return
     
     # If there is a message from the ESP32 + RFID reader
@@ -28,22 +27,27 @@ def on_message(client, userdata, message):
         id = payload['id']
         cmd = payload['cmd']
         global idPompa
+        global result
         idPompa = payload['idPompa']
+        print(f"---- Richiesta da Utente {id} alla Pompa {idPompa},  Comando: {cmd} ----")
         #Check if there's a user with that ID in the DB
         cursor.execute(f"SELECT 1 FROM Utente WHERE id=\'{id}\';")
         result = cursor.fetchall()
 
         if result:
-            #print('beer/pompa'+str(idPompa))
+            print('Success')
             client.publish('beer/pump'+str(idPompa), payload['cmd'])
         else:
+            #Se l'ID non è riconosciuto
+            print('Failed')
             client.publish('beer/pump'+str(idPompa),'2') 
-            return   #Se l'ID non è riconosciuto
-
+            return   
+        
     # If the tag has been removed, receive the duration 
     if message.topic == "beer/duration":
+        print('Bicchiere rimosso')
         payload = json.loads(decoded_message)
-        print(payload['duration'])
+        print(f"Erogati {int(payload['duration'])*0.045} mL")
         # If less than 50 ms, do not consider it
         if int(payload['duration']) > 50:
             #idPompa = payload['idPompa']
@@ -51,7 +55,7 @@ def on_message(client, userdata, message):
             # Arbitrariamente, erogati 45 ml/s [da rivedere]
             mills = int(payload['duration'])*0.045
             id = payload['id']
-            if id=="":
+            if id=="" or not result: #Se utente nullo o non compare nel DB, salta
                 return
             #idPompa = payload['idPompa']
             # Check which beer is assigned to that pump
@@ -61,6 +65,8 @@ def on_message(client, userdata, message):
             cursor.execute(
                 f"INSERT INTO Consumazione (user_id,beer_id,quantita) VALUES (\'{id}\',{result[0][0]},{mills});")
             db.commit()
+            print("---- Consumazione effettuata ----")
+            
 
 # Setting up DB connection
 db = mysql.connector.connect(

@@ -32,10 +32,19 @@ beerproject/
 │  ├─ register.php
 │  ├─ resetdebt.php
 │  ├─ getconsumazioni.php
+├─ esp_programs/
+│  ├─ others/
+│  │  ├─ dump.ino
+│  │  ├─ esp8266_write_card.ino
+│  ├─ current/
+│  │  ├─ esp32_rfid.ino
+│  │  ├─ esp8266_card_to_tag.ino
+│  │  ├─ pump.ino
 ├─ DB/
 │  ├─ TABLES/
 │  │  ├─ create_tables.sql
 │  │  ├─ ER model.mwb
+│  │  ├─ backup.sql
 ├─ app/
 │  ├─ beerstation/
 │  │  ├─ lib/
@@ -51,7 +60,10 @@ beerproject/
 │  │  │  ├─ utils.dart
 ├─ docs/
 │  ├─ app_images/
+│  ├─ diagrams/
+│  │  ├─ wiring/
 │  ├─ icons/
+│  ├─ Relazione IOT Arzon 142439.doc
 ```
 </details>
 
@@ -76,3 +88,5 @@ mosquitto
 ```
 python rasp_server.py
 ```
+The main programs to flash on the ESP boards are located in Arduino/current
+Inside Arduino/others there is a sketch for writing userIDs on MIFARE 1K.
