@@ -21,6 +21,11 @@ I tried to implement as many things as possible I've learned to use during the c
 Arzon Francesco - 142439
 
 ## Folder Structure:
+*API folder* contains the php server files used to create an API for the mobile application.
+*esp_programs folder* contains the sketches loaded onto the ESP boards.
+*DB folder* contains the tables for the database and some py files used to populate the database
+*app folder* contains the files and classes used to build the mobile app with Flutter
+*rasp_server.py* is the Python server that runs on the Raspberry Pi
 
 <details>
 <summary>Brief tree folder view with the essential files</summary>
