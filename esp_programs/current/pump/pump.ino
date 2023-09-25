@@ -133,7 +133,7 @@ void resetScreen() {
 
 void showBeer() {
   display.clearDisplay();
-  display.invertDisplay(true);
+  display.invertDisplay(false);
   display.drawBitmap(
     10,
     (display.height() - beer_height) / 2,
@@ -150,7 +150,7 @@ void showBeer() {
 
 void showErogazione() {
   display.clearDisplay();
-  display.invertDisplay(true);
+  display.invertDisplay(false);
   display.setTextSize(2);
   display.setTextColor(WHITE);
   display.setCursor(2, 10 + (display.height() - beer_height) / 2);

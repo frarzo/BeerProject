@@ -88,13 +88,13 @@ String readUserID() {
 void reconnect() {
   // Loop until we're reconnected
   while (!client.connected()) {
-    Serial.print("DISCONNECTED! Attempting MQTT connection...");
+    //Serial.print("DISCONNECTED! Attempting MQTT connection...");
     // Create a random client ID
     String clientId = "ESP32-NFCTagReader";
 
     // Attempt to connect
     if (client.connect(clientId.c_str())) {
-      Serial.println("connected");
+      Serial.print("");
     } else {
       Serial.print("failed, rc=");
       Serial.print(client.state());
@@ -120,7 +120,7 @@ void loop() {
   static String uid_tag = "";
 
   if (rfid.PICC_IsNewCardPresent() && rfid.PICC_ReadCardSerial()) {
-    Serial.println(rfid.uid.sak,HEX);
+    //Serial.println(rfid.uid.sak,HEX);
     if(rfid.uid.sak != 0x00){
       return;
     }
@@ -198,6 +198,7 @@ void loop() {
 
       if (client.publish(topicDuration, payload2)) {
         Serial.println("MQTT publish to topic beer/duration");
+        Serial.println("----------------------");
       }
       //  noted the last tag's time, reset
       tagPresent = false;

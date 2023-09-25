@@ -33,11 +33,11 @@ def on_message(client, userdata, message):
         #Check if there's a user with that ID in the DB
         cursor.execute(f"SELECT 1 FROM Utente WHERE id=\'{id}\';")
         result = cursor.fetchall()
-
+        
         if result:
             print('Success')
             client.publish('beer/pump'+str(idPompa), payload['cmd'])
-        else:
+        if not result and cmd=='1':
             #Se l'ID non è riconosciuto
             print('Failed')
             client.publish('beer/pump'+str(idPompa),'2') 
@@ -47,7 +47,6 @@ def on_message(client, userdata, message):
     if message.topic == "beer/duration":
         print('Bicchiere rimosso')
         payload = json.loads(decoded_message)
-        print(f"Erogati {int(payload['duration'])*0.045} mL")
         # If less than 50 ms, do not consider it
         if int(payload['duration']) > 50:
             #idPompa = payload['idPompa']
@@ -55,10 +54,13 @@ def on_message(client, userdata, message):
             # Arbitrariamente, erogati 45 ml/s [da rivedere]
             mills = int(payload['duration'])*0.045
             id = payload['id']
-            if id=="" or not result: #Se utente nullo o non compare nel DB, salta
+            #print(result)
+            if (not result): #Se utente nullo o non compare nel DB, salta
+                print("Erogazione fallita, contatta il personale")
                 return
             #idPompa = payload['idPompa']
             # Check which beer is assigned to that pump
+            print(f"Erogati {int(payload['duration'])*0.045} mL")
             cursor.execute(f'SELECT beer_id FROM Pompa WHERE id=\'{idPompa}\'')
             result = cursor.fetchall()
             # Saves the drinks to DB which will update the tab

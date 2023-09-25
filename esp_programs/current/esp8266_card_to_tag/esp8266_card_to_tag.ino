@@ -29,6 +29,8 @@ void setup() {
   //Per un aiuto visivo se lettura e scrittura sono andate a buon fine
   pinMode(BUILTIN_LED, OUTPUT);
   digitalWrite(BUILTIN_LED, HIGH);
+  Serial.print("Avvicina la carta di un utente registrato\n");
+
 }
 
 void loop() {
@@ -82,10 +84,10 @@ void loop() {
         return;
       } else {
         digitalWrite(BUILTIN_LED, HIGH);
-        Serial.println("Salvato Id utente nel tag");
         cardIsRead = false;
       }
     }
+    Serial.println("Salvato Id utente nel tag");
   }
 
   Serial.println();
