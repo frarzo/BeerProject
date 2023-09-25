@@ -93,5 +93,5 @@ mosquitto
 ```
 python rasp_server.py
 ```
-The main programs to flash on the ESP boards are located in Arduino/current
+The main programs to flash on the ESP boards are located in Arduino/current  
 Inside Arduino/others there is a sketch for writing userIDs on MIFARE 1K.
