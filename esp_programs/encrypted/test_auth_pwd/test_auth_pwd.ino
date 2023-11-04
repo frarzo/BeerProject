@@ -17,25 +17,46 @@
 #include <MFRC522.h>
 int flag = 0;
 #define RST_PIN 5  //
-#define SS_PIN 4  //
+#define SS_PIN 4   //
 
 MFRC522 mfrc522(SS_PIN, RST_PIN);  // Create MFRC522 instance
 MFRC522::StatusCode status;
+
+uint8_t AUTH0Address = 0x29;
+uint8_t ACCESSAddress = 0x2A;
 uint8_t PSWAddress = 0x2B;
-byte buffer[18];
-byte size = sizeof(buffer);
+uint8_t PACKAddress = 0x2C;
+// byte ACCESSbuffer[6]; in realtà per conveniena 0x29=0x2C
+byte PSWbuffer[6];
+byte PACKbuffer[4];
+byte AUTH0buffer[4] = { 0x04, 0x00, 0x00, 0x00 };
+byte PSWsize = sizeof(PSWbuffer);
+byte PACKSsize = sizeof(PACKbuffer);
+byte AUTH0size = sizeof(PSWbuffer);
+
+
+
+
 
 
 void setup() {
   Serial.begin(9600);  // Initialize serial communications with the PC
   SPI.begin();         // Init SPI bus
   mfrc522.PCD_Init();  // Init MFRC522
-  memcpy(buffer, "1234", 4);
+  memcpy(PSWbuffer, "1234", 4);
+
+  PACKbuffer[0] = 0x80;
+  for (byte i = 1; i < 4; i++) {
+    PACKbuffer[i] = 0x00;
+  }
+
+
+  //memcpy(PACKbuffer, 0x80, 4);
 }
 
 void loop() {
+  if (flag == 1) { return; }  //Only once for testing
   Serial.println("inizio 1 LOOP");
-  if (flag == 1) { return; }
   Serial.println("inizio mfr522");
   // Look for new cards
   if (!mfrc522.PICC_IsNewCardPresent()) {
@@ -47,31 +68,63 @@ void loop() {
     delay(50);
     return;
   }
- 
+  byte PSWBuff[] = { 0x31, 0x32, 0x33, 0x34 };  // 32 bit password default FFFFFFFF.
+  byte pACK[] = { 0, 0 };
+  status = (MFRC522::StatusCode)mfrc522.PCD_NTAG216_AUTH(&PSWBuff[0], pACK);
 
   Serial.println("prima di scrivi PACK");
-  status = (MFRC522::StatusCode)mfrc522.MIFARE_Ultralight_Write(PSWAddress, &buffer[0], 4);
+  status = (MFRC522::StatusCode)mfrc522.MIFARE_Ultralight_Write(PACKAddress, &PACKbuffer[0], 4);
   if (status != MFRC522::STATUS_OK) {
     Serial.print(F("MIFARE WRITE FAILED: "));
     Serial.println(mfrc522.GetStatusCodeName(status));
     return;
   } else {
     Serial.println("PACK WRITE SUCCESSFUL");
-    flag = 1;
   }
   Serial.println("dopo di scrivi PACK");
 
-//---------------------------------
+  //---------------------------------
   Serial.println("prima di scrivi PSW");
-  status = (MFRC522::StatusCode)mfrc522.MIFARE_Ultralight_Write(PSWAddress, &buffer[0], 4);
+  status = (MFRC522::StatusCode)mfrc522.MIFARE_Ultralight_Write(PSWAddress, &PSWbuffer[0], 4);
   if (status != MFRC522::STATUS_OK) {
     Serial.print(F("MIFARE WRITE FAILED: "));
     Serial.println(mfrc522.GetStatusCodeName(status));
     return;
   } else {
     Serial.println("PSW WRITE SUCCESSFUL");
-    flag = 1;
   }
   Serial.println("dopo di scrivi PSW");
+
+  //----------------------------------
+  Serial.println("prima di scrivi AUTH0");
+  status = (MFRC522::StatusCode)mfrc522.MIFARE_Ultralight_Write(AUTH0Address, &AUTH0buffer[0], 4);
+  if (status != MFRC522::STATUS_OK) {
+    Serial.print(F("MIFARE WRITE FAILED: "));
+    Serial.println(mfrc522.GetStatusCodeName(status));
+    return;
+  } else {
+    Serial.println("AUTH0 WRITE SUCCESSFUL");
+    flag = 1;
+  }
+  Serial.println("dopo di scrivi AUTH0");
+
+  //----------------------------------
+  Serial.println("prima di scrivi ACCESS");
+  status = (MFRC522::StatusCode)mfrc522.MIFARE_Ultralight_Write(ACCESSAddress, &PACKbuffer[0], 4);
+  if (status != MFRC522::STATUS_OK) {
+    Serial.print(F("MIFARE WRITE FAILED: "));
+    Serial.println(mfrc522.GetStatusCodeName(status));
+    return;
+  } else {
+    Serial.println("ACCESS WRITE SUCCESSFUL");
+    flag = 1;
+  }
+  Serial.println("dopo di scrivi ACCESS");
+
+
+
+
+
+
   mfrc522.PICC_HaltA();
 }

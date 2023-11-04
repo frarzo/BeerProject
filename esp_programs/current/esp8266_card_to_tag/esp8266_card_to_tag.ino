@@ -22,7 +22,7 @@ void setup() {
   Serial.begin(115200);  // Initialize serial communications
   SPI.begin();           // Init SPI bus
   mfrc522.PCD_Init();    // Init MFRC522
-  //memcpy(buffer, "00aaa000", 8);
+  //memcpy(buffer, "00aaa000", 8);
   for (byte i = 0; i < 6; i++) {
     key.keyByte[i] = 0xFF;
   }
