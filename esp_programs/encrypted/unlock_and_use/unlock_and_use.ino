@@ -45,13 +45,19 @@ void loop() {
     return;
   }
 
+  if(mfrc522.uid.sak==0x00){
+    Serial.println("HO LETTO IL SAK PRIMA DI AUTH");
+  }
+
+
+
+
   byte PSWBuff[] = { 0x31, 0x32, 0x33, 0x34 };  // 32 bit password default FFFFFFFF.
   byte pACK[] = { 0x80, 0x80 };                 // 16 bit password ACK returned by the NFCtag.
 
   /*
   ATTENZIONE: Ora è necessario l'auth pure per leggere i dati!!!
   */
-
 
   Serial.print("Auth: ");
   status = (MFRC522::StatusCode)mfrc522.PCD_NTAG216_AUTH(&PSWBuff[0], pACK);
@@ -64,6 +70,7 @@ void loop() {
   }
   // Serial.println(mfrc522.PCD_NTAG216_AUTH(&PSWBuff[0], pACK));  // Request authentification if return STATUS_OK we are good.
 
+  //Siamo autenticati ora si può accedere alla memoria e fare operazioni fino a quando non si torna allo stato HALT
 
   status = (MFRC522::StatusCode)mfrc522.MIFARE_Ultralight_Write(0x0A, &message[0], 4);
   if (status != MFRC522::STATUS_OK) {
