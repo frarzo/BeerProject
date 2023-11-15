@@ -19,10 +19,12 @@ void setup() {
   mfrc522.PCD_Init();  // Init MFRC522 card
 
   // Prepare the key (used both as key A and as key B)
-  // using FFFFFFFFFFFFh which is the default at chip delivery from the factory
+  // using FF:FF:FF:FF:FF:FF which is the default at chip delivery from the factory
   for (byte i = 0; i < 6; i++) {
     key.keyByte[i] = 0xFF;
   }
+    key.keyByte[5] = 0xBB;
+
 
   Serial.println(F("Scan a MIFARE Classic PICC to demonstrate read and write."));
   Serial.print(F("Using key (for A and B):"));
@@ -60,13 +62,13 @@ void loop() {
     return;
   }
   //Secondo settore, blocco 4, 16 byte
-  byte sector = 2;
-  byte blockAddr = 4;
-  byte dataBlock[] = { //(FF FF FF FF FF AA | FF 07 80 | FF FF FF FF FF AA)
-                       0xFF, 0xFF, 0xFF, 0xFF,
-                       0xFF, 0xAA, 0xFF, 0x07,
-                       0x80, 0xFF, 0xFF, 0xFF,
-                       0xFF, 0xFF, 0xFF, 0xAA
+  byte sector = 1;
+  byte blockAddr = 7;
+  byte testAddr=5;
+  byte dataBlock[] = { //(FF FF FF FF FF FF | FF 07 80 FF | FF FF FF FF FF FF)
+                       0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 
+                       0xFF, 0x07, 0x80, 0xFF, 
+                       0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
   };
   byte trailerBlock = 7;
   MFRC522::StatusCode status;
@@ -91,7 +93,7 @@ void loop() {
   // Read data from the block
   Serial.print(F("Reading data from block "));
   Serial.print(blockAddr);
-  Serial.println(F(" ..."));
+  Serial.println(F(" ...  but you cannot see"));
   status = (MFRC522::StatusCode)mfrc522.MIFARE_Read(blockAddr, buffer, &size);
   if (status != MFRC522::STATUS_OK) {
     Serial.print(F("MIFARE_Read() failed: "));
@@ -112,9 +114,9 @@ void loop() {
     Serial.println(mfrc522.GetStatusCodeName(status));
     return;
   }
-
   // Write data to the block
-  Serial.print(F("Writing data into block "));
+
+  Serial.print(F("Writing data into sector trailer "));
   Serial.print(blockAddr);
   Serial.println(F(" ..."));
   dump_byte_array(dataBlock, 16);
@@ -125,11 +127,26 @@ void loop() {
     Serial.println(mfrc522.GetStatusCodeName(status));
   }
   Serial.println();
+  
+  // Write data to the block again
+
+  Serial.print(F("Writing data into block "));
+  Serial.print(testAddr);
+  Serial.println(F(" ..."));
+  dump_byte_array(dataBlock, 16);
+  Serial.println();
+  status = (MFRC522::StatusCode)mfrc522.MIFARE_Write(testAddr, dataBlock, 16);
+  if (status != MFRC522::STATUS_OK) {
+    Serial.print(F("MIFARE_Write() failed: "));
+    Serial.println(mfrc522.GetStatusCodeName(status));
+  }
+  Serial.println();
+
 
   // Read data from the block (again, should now be what we have written)
-  Serial.print(F("Reading data from block "));
+  Serial.print(F("Reading data from sector trailer "));
   Serial.print(blockAddr);
-  Serial.println(F(" ..."));
+  Serial.println(F(" ... but you cannot again"));
   status = (MFRC522::StatusCode)mfrc522.MIFARE_Read(blockAddr, buffer, &size);
   if (status != MFRC522::STATUS_OK) {
     Serial.print(F("MIFARE_Read() failed: "));
@@ -137,6 +154,21 @@ void loop() {
   }
   Serial.print(F("Data in block "));
   Serial.print(blockAddr);
+  Serial.println(F(":"));
+  dump_byte_array(buffer, 16);
+  Serial.println();
+
+  // Read data from the block (again, should now be what we have written)
+  Serial.print(F("Reading data from block "));
+  Serial.print(testAddr);
+  Serial.println(F(" ..."));
+  status = (MFRC522::StatusCode)mfrc522.MIFARE_Read(testAddr, buffer, &size);
+  if (status != MFRC522::STATUS_OK) {
+    Serial.print(F("MIFARE_Read() failed: "));
+    Serial.println(mfrc522.GetStatusCodeName(status));
+  }
+  Serial.print(F("Data in block "));
+  Serial.print(testAddr);
   Serial.println(F(":"));
   dump_byte_array(buffer, 16);
   Serial.println();
