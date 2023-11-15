@@ -56,7 +56,7 @@ void loop() {
   if (rfid.PICC_IsNewCardPresent()) {  // new tag is available
     Serial.println("LETTURA\n");
     //client.publish("test", "RFID letto\n");
-    if (rfid.PICC_ReadCardSerial()) {                                 // NUID has been readed
+    if (rfid.PICC_ReadCardSerial()) {                                 // NUID has been read
       MFRC522::PICC_Type piccType = rfid.PICC_GetType(rfid.uid.sak);  //sak è il byte risposta di ntag213, indica che il tag è univocamente selezionato e solo questo reader comunica con esso anche con altri device nfc nei paraggi
       //Serial.println(rfid.uid.sak);
       Serial.print("RFID/NFC Tag Type: ");
