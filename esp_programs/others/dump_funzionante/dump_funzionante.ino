@@ -23,28 +23,9 @@ PubSubClient client(WIFIclient);
 
 void setup() {
   Serial.begin(9600);
-  client.publish()
-  WiFi.begin(ssid, password);
-  Serial.print("Connecting to Wifi...");
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(2000);
-    Serial.print(".");
-  }
+  
+
   Serial.println("");
-
-  client.setServer(broker, port);
-
-  while (!client.connected()) {
-    Serial.println("Connecting to MQTT Broker ...");
-
-    if (client.connect("ESP32-cardReader")) {
-      Serial.println("Connected to Broker as ESP32-cardReader");
-    } else {
-      Serial.print("Failed with state ");
-      Serial.println(client.state());
-      delay(1000);
-    }
-  }
 
   SPI.begin();      // init SPI bus
   rfid.PCD_Init();  // init MFRC522
