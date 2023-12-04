@@ -7,7 +7,6 @@
 
 */
 #include <MFRC522.h>
-#include <PubSubClient.h>
 #define RST_PIN 5  // RST-PIN for RC522 - RFID - SPI - Modul GPIO5
 #define SS_PIN 4
 
@@ -33,9 +32,9 @@ void setup() {
   Serial.begin(115200);  // Initialize serial communications
   SPI.begin();           // Init SPI bus
   mfrc522.PCD_Init();    // Init MFRC522
-  //memcpy(buffer, "00aaa000", 8);
+  //set card psw (AA FF AA FF AA FF)
   for (byte i = 0; i < 6; i++) {
-    key.keyByte[i] = 0xFF;
+    key.keyByte[i] = (i % 2 == 0) ? 0xAA : 0xFF;
   }
   //Per un aiuto visivo se lettura e scrittura sono andate a buon fine
   pinMode(BUILTIN_LED, OUTPUT);
@@ -83,7 +82,7 @@ void loop() {
     mfrc522.PCD_StopCrypto1();
   }
   // Se è il tag NTAG213 ed è in memoria un ID utente
-  // a quanto pare uid può essere letto prima di avere eseguito l'auth
+  //  uid può essere letto prima di avere eseguito l'auth
   if (cardIsRead == true && mfrc522.uid.sak == 0x00) {
 
     Serial.print("Auth: ");
