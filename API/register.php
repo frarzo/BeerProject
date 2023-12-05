@@ -1,5 +1,7 @@
 <?php
 
+require_once('utils.php');
+
 if (isset($_POST["email"]) && $_POST["email"] != "" && isset($_POST["psw"]) && $_POST["psw"] != "") {
     $dbhost = 'localhost';
     $dbuser = 'app_api';

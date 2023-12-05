@@ -1,5 +1,9 @@
 <?php
 
+require_once('utils.php');
+
+$encryption = new Encryption();
+
 if (isset($_POST["email"]) && $_POST["email"] != "" && isset($_POST["psw"]) && $_POST["psw"] != "") {
     $dbhost = 'localhost';
     $dbuser = 'app_api';

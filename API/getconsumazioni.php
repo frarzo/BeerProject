@@ -1,4 +1,7 @@
 <?php
+
+require_once('utils.php');
+
 $out;
 if ($_GET["id"] && $_GET["id"]) {
     $dbhost = 'localhost';

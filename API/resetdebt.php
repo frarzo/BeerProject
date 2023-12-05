@@ -1,5 +1,7 @@
 <?php
 
+require_once('utils.php');
+
 if ($_GET["id"] && $_GET["id"]) {
     $dbhost = 'localhost';
     $dbuser = 'app_api';
