@@ -34,7 +34,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
         return ListTile(
           tileColor: index.isOdd ? oddItemColor : evenItemColor,
           title: Text(
-              '${(pippo[index])['importo']}€    at  ${pippo[index]['data_consumazione']}'),
+              '${(pippo[index])['importo']}€    at   ${pippo[index]['data_consumazione']}'),
         );
       },
     );
@@ -145,6 +145,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
                 ),
                 IconButton(
                     onPressed: () async {
+                     //utente.id viene criptato in resetdebt(), quindi ok
                       if (await resetdebt(url, resetUrl, utente.id, header)) {
                         showWindowDialog(
                             'Pagamento confermato! (se non si aggiorna riavvia l\'app)',

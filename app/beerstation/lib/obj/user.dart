@@ -1,3 +1,5 @@
+import 'package:beerstation/utils.dart';
+
 class User {
   final String id;
   final String nome;
@@ -18,7 +20,15 @@ class User {
     return this.id;
   }
 
-
+  factory User.fromEncryptedJson(Map<String, dynamic> json) {
+    return User(
+        id: Encryption.instance.decrypt(json['id']),
+        nome: Encryption.instance.decrypt(json['nome']),
+        cognome: Encryption.instance.decrypt(json['cognome']),
+        email: Encryption.instance.decrypt(json['email']),
+        saldo: Encryption.instance.decrypt(json['saldo']),
+        datareg: Encryption.instance.decrypt(json['data_reg']));
+  }
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(

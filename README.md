@@ -32,6 +32,12 @@ Arzon Francesco - 142439
 
 ```
 beerproject/
+├─ certs/
+│  ├─ ca/
+│  ├─ broker/
+│  ├─ rasp/
+│  ├─ clientesp8266/
+│  ├─ clientesp32/
 ├─ API/
 │  ├─ login.php
 │  ├─ register.php

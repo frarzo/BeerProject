@@ -105,14 +105,24 @@ class _LoginState extends State<LoginScreen> {
             if (checkFields(controllerMail, controllerPassword)) {
               //String mail = encrypt_string(controllerMail.text);
               //String psw = encrypt_string(controllerPassword.text);
-              String mail = controllerMail.text;
-              String psw = controllerPassword.text;
+
+              //classe.instance.metodo????
+              String mail = Encryption.instance.encrypt(controllerMail.text);
+              String psw = Encryption.instance.encrypt(controllerPassword.text);
 
               Map<String, String> payload = {'email': mail, 'psw': psw};
-              //Richiesta POST AL SERVER PHP
+              //Richiesta POST AL SERVER PHP, ritorna decrypted
               var utente = await DBPost(url, loginUrl, header, payload);
-              pippo = await DBGetCons(url,
-                  retrieveConsumazioniUrl,utente.id, header);
+
+              //utente.id è decriptato con il metodo fromEncryptedJson di Utente, quindi bisogna criptarlo di nuovo
+              var encryptedId = Encryption.instance.encrypt(utente.id);
+
+              // retrieves encrypted, decrypt and return readable list
+              pippo = await DBGetCons(
+                  url, retrieveConsumazioniUrl, encryptedId, header);
+
+
+
               //print('dopo richiesta');
               print(utente.getId());
               //print(utente.saldo);

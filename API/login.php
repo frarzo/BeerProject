@@ -1,5 +1,4 @@
 <?php
-
 require_once('utils.php');
 
 $encryption = new Encryption();
@@ -16,8 +15,8 @@ if (isset($_POST["email"]) && $_POST["email"] != "" && isset($_POST["psw"]) && $
         exit('Failed to connect to MySQL: ' . mysqli_connect_error());
     }
 
-    $user_psw = $_POST['psw'];
-    $user_email = $_POST['email'];
+    $user_psw = $encryption->decrypt($_POST['psw']);
+    $user_email = $encryption->decrypt($_POST['email']);
 
 
     $result = mysqli_query($connection, "SELECT * FROM Utente WHERE email='$user_email' AND psw='$user_psw'");
@@ -43,11 +42,13 @@ if (isset($_POST["email"]) && $_POST["email"] != "" && isset($_POST["psw"]) && $
 }
 function response($id, $nome, $cognome, $email, $saldo, $data_reg) {
 
-    $response['id'] = $id;
-    $response['nome'] = $nome;
-    $response['cognome'] = $cognome;
-    $response['email'] = $email;
-    $response['saldo'] = $saldo;
-    $response['data_reg'] = $data_reg;
+    global $encryption;
+    $response['id'] = $encryption->encrypt($id);
+    $response['nome'] = $encryption->encrypt($nome);
+    $response['cognome'] = $encryption->encrypt($cognome);
+    $response['email'] = $encryption->encrypt($email);
+    $response['saldo'] = $encryption->encrypt($saldo);
+    $response['data_reg'] = $encryption->encrypt($data_reg);
+
     echo json_encode($response);
 }

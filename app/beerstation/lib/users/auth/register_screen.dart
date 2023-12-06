@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:http/http.dart' as http;
 import 'package:beerstation/utils.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -13,7 +12,6 @@ class _RegisterState extends State<RegisterScreen> {
   final controllerPassword = TextEditingController();
   final controllerNome = TextEditingController();
   final controllerCognome = TextEditingController();
-
 
   Widget cognome() {
     return Column(
@@ -177,10 +175,10 @@ class _RegisterState extends State<RegisterScreen> {
         print('Register Button Pressed');
 
         if (checkFields(controllerMail, controllerPassword)) {
-          String mail = controllerMail.text;
-          String psw = controllerPassword.text;
-          String nome = controllerNome.text;
-          String cognome = controllerCognome.text;
+          String mail = Encryption.instance.encrypt(controllerMail.text);
+          String psw = Encryption.instance.encrypt(controllerPassword.text);
+          String nome = Encryption.instance.encrypt(controllerNome.text);
+          String cognome = Encryption.instance.encrypt(controllerCognome.text);
           Map<String, String> payload = {
             'email': mail,
             'psw': psw,

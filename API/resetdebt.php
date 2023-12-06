@@ -2,6 +2,8 @@
 
 require_once('utils.php');
 
+$encryption = new Encryption();
+
 if ($_GET["id"] && $_GET["id"]) {
     $dbhost = 'localhost';
     $dbuser = 'app_api';
@@ -13,12 +15,12 @@ if ($_GET["id"] && $_GET["id"]) {
         echo mysqli_connect_error();
         exit('Failed to connect to MySQL: ' . mysqli_connect_error());
     }
-    $user_id = $_GET['id'];
+    $user_id = $encryption->decrypt($_GET['id']);
 
     if ($result = mysqli_query($connection, "UPDATE Utente SET saldo=0 where id='$user_id'")) {
-        $out['status'] = '0';
+        $out['status'] = $encryption->encrypt('0');
     } else {
-        $out['status'] = '1';
+        $out['status'] = $encryption->encrypt('1');
     }
     echo json_encode($out);
 }
