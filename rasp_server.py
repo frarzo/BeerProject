@@ -5,7 +5,7 @@ import mysql.connector
 
 # Setting up MQTT
 broker = "192.168.1.110"
-port = 1883
+port = 8883
 client = mosquitto.Client("RaspberryPi HUB")
 
 
@@ -90,7 +90,9 @@ client.tls_set(
     certfile="./certs/rasp/rasp.crt",
     keyfile="./certs/rasp/rasp.key",
     cert_reqs=ssl.CERT_REQUIRED,
+    tls_version=ssl.PROTOCOL_TLSv1_2
 )
+#client.tls_insecure_set(True)
 client.connect(broker)
 
 client.subscribe("beer/requests")
