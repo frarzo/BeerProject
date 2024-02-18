@@ -11,9 +11,11 @@
 
 const char* ssid = "dev";
 const char* password = "WbdL57ak12";
-const char* broker = "192.168.1.110";
+//const char* broker = "192.168.1.110";
+IPAddress broker(192,168,1,110);
 const char* topic = "beer/pump1";
 const int port = 8883; //8883 per tls, 1883 per testing
+
 
 int idPompa = 1;
 int relayPin = 4;
@@ -105,7 +107,7 @@ const char* client_cert = \
 "8Lm/beUwwsv4vBp+1DnjE0JI2kr58hzaQQ==\n" \
 "-----END CERTIFICATE-----\n";
 
-const char* client_key = \
+const char* client_private_key = \
 "-----BEGIN RSA PRIVATE KEY-----\n" \
 "MIIEpQIBAAKCAQEA4liSjs3L/qHDnPyHcvjPC/IHPNZwnKW6TLjokcTUnjON15Po\n" \
 "JFqDOOA6mRsEwJR5qaLZC024Nt8fIg0QB8YuIehKTtgonCgd2h3mSYfu9qpvwSXL\n" \
@@ -275,7 +277,7 @@ void setup() {
   //Setting up CA cert and clientesp8266 cert/key
   BearSSL::X509List *serverTrustedCA = new BearSSL::X509List(ca_cert);
   BearSSL::X509List *serverCertList = new BearSSL::X509List(client_cert);
-  BearSSL::PrivateKey *serverPrivKey = new BearSSL::PrivateKey(client_key);
+  BearSSL::PrivateKey *serverPrivKey = new BearSSL::PrivateKey(client_private_key);
 
   //Nuovi metodi invece di setCAcert, setCertificate, setPrivateKey di esp32
   espClient.setTrustAnchors(serverTrustedCA);

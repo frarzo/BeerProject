@@ -88,7 +88,8 @@ void loop() {
     Serial.println();
 
     // Read data from the block
-    Serial.print(F("Reading data from block ")); Serial.print(blockAddr);
+    Serial.print(F("Reading data from block ")); 
+    Serial.print(blockAddr);
     Serial.println(F(" ..."));
     status = (MFRC522::StatusCode) mfrc522.MIFARE_Read(blockAddr, buffer, &size);
     if (status != MFRC522::STATUS_OK) {
