@@ -1,0 +1,6 @@
+nfc:https://www.mouser.it/applications/rfid-nfc-introduction/
+mfrc522:https://it.szks-kuongshun.com/uno/uno-board-shield/rc522-mfrc-522-rfid-module.html
+esp32:https://www.teachmemicro.com/wp-content/uploads/2021/01/esp32-wifi-manager.jpg
+esp8266:https://cdn-reichelt.de/bilder/web/artikel_ws/A300/D1_MINI_01_NEU.jpg
+
+deeznuts

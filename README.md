@@ -14,7 +14,7 @@ Project for my IoT's course @UniUD.
 </div>
 
 
-This project I developed is my submission for my _Internet of Things'_ exam.
+This project was used for my _Internet of Things'_ exam, and later for my bachelor degree's thesis.
 
 I tried to implement as many things as possible I've learned to use during the course and using the ESP programmable boards I've previously played with.
 
@@ -25,13 +25,26 @@ Arzon Francesco - 142439
 *esp_programs folder* contains the sketches loaded onto the ESP boards.  
 *DB folder* contains the tables for the database and some py files used to populate the database.  
 *app folder* contains the files and classes used to build the mobile app with Flutter.  
+*thesis* is the folder containing the thesis related files
 *rasp_server.py* is the Python server that runs on the Raspberry Pi.  
+
+
+## Overview
+A summed up view of the project's components interacting and the Use Case Diagram.
+<img src='thesis/img/flow.png'>
+
+<img src='thesis/img/usecasediagram.png'>
 
 <details>
 <summary>Brief tree folder view with the essential files</summary>
 
 ```
 beerproject/
+├─ thesis/
+│  ├─ thesis.tex
+│  ├─ thesis.pdf
+│  ├─ presentation.ppt
+│  ├─ img/
 ├─ certs/
 │  ├─ ca/
 │  ├─ broker/
@@ -79,6 +92,8 @@ beerproject/
 </details>
 
 ## App Screenshots:
+
+<img src='docs/diagram/app_diagram.png'> 
 
 <div><img src='docs/app_images/login.jpg' width='150'>
 <img src='docs/app_images/register.jpg' width='150'>
